@@ -239,7 +239,7 @@
     });
 
 
-    $('#confirm_password').on('keyup', function() {
+    $('#password, #confirm_password').on('keyup', function() {
         if ($('#password').val() == $('#confirm_password').val()) {
             
             $('#passwordError').html('Passwords matched').css('color', 'green');
