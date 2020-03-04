@@ -50,14 +50,17 @@ class ContactController extends Controller
         if(count($email)>0){
             return ['success' => false, 'message' => 'Email already taken'];
         }else{
-        $contact = new Contact;
-        $contact->name = $request->name;
-        $contact->email = $request->email;
-        $contact->password = $request->password;
 
-        $contact->save();
-        return ['success' => true, 'message' => 'Data Inserted'];
-    }
+            $contact = new Contact;
+            $contact->name = $request->name;
+            $contact->email = $request->email;
+            $contact->password = $request->password;
+
+            $contact->save();
+            return ['success' => true, 'message' => 'Data Inserted'];
+        
+
+        }
        
     }
 

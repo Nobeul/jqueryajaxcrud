@@ -65,6 +65,12 @@
                         <div class="form-group">
                             <label for="exampleFormControlInput3">Password</label>
                             <input type="text" class="form-control" id="password" name="password" placeholder="Enter your password here">
+                            <!-- <span id="passwordError"></span> -->
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput4">Confirm Password</label>
+                            <input type="text" class="form-control" id="confirm_password" name="confirm_password" placeholder="Enter your password again">
+                            <span id="passwordError"></span>
                         </div>
 
                     </div>
@@ -216,29 +222,32 @@
         var email = $(this).val();
 
         $.ajax({
-            url: "{{url('contact/store')}}",
-            method: "POST",
-            dataType: "JSON",
-            data:{
-                'email':email            } 
-        })
-        .done(function(response) {
-            if (response.success == false) {
-                
-                $('#availability').html(response.message);
-            }
-        });
+                url: "{{url('contact/store')}}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    'email': email
+                }
+            })
+            .done(function(response) {
+                if (response.success == false) {
+
+                    $('#availability').html(response.message);
+                }
+            });
 
     });
 
-    // if (response.success == flase) {
-    //             // $('#modal').modal('hide');
-    //             var html = 'Email is already available';
-    //             $('#availability').html(html);
-    //         }
 
-
-
+    $('#confirm_password').on('keyup', function() {
+        if ($('#password').val() == $('#confirm_password').val()) {
+            
+            $('#passwordError').html('Passwords matched').css('color', 'green');
+           
+        } else{
+            $('#passwordError').html('Passwords did not match').css('color', 'red');
+        }
+    });
 
     $('table').on('click', '.btnEdit', function() {
         $('.modal-title').text('Edit Contact');
@@ -309,6 +318,9 @@
                 email: true
             },
             password: {
+                required: true
+            },
+            confirm_password: {
                 required: true
             }
 
