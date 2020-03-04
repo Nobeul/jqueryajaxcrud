@@ -49,8 +49,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="modalForm" action="">
-
+                <form id="modalForm">
                     <div class="modal-body">
                         <input type="hidden" name="id">
 
@@ -61,6 +60,7 @@
                         <div class="form-group">
                             <label for="exampleFormControlInput2">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email here">
+                            <span id="availability" style="color: red"></span>
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlInput3">Password</label>
@@ -151,12 +151,14 @@
         var name = $('input[name = "name"]').val();
         var email = $('input[name = "email"]').val();
         var password = $('input[name = "password"]').val();
+        var token = "{{ csrf_token()}}";
 
         return {
             id: id,
             name: name,
             email: email,
-            password: password
+            password: password,
+            _token: token
         }
     }
 
@@ -173,32 +175,67 @@
         $('#modalDltBtn').attr('data-id', id);
     });
 
+    /*$('form#modalForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: "{{url('contact/store')}}",
+            dataType: "json",
+            cache: false,
+            data: getInputs(),
+        })
+        .done(function(response)
+        {
+            if (response.success == true) {
+                $('#modalForm').modal('hide');
+            }
+            console.log(response);
+        });
+    });*/
+
+
     function store() {
+        // event.preventDefault();
+        $.ajax({
+                method: "POST",
+                url: "{{url('contact/store')}}",
+                dataType: "json",
+                cache: false,
+                data: getInputs(),
+            })
+            .done(function(response) {
+                if (response.success == true) {
+                    $('#modal').modal('hide');
+                }
+                console.log(response);
+            });
+    }
+
+    $('#email').blur(function() {
+
+        var email = $(this).val();
 
         $.ajax({
-            method: 'POST',
-            url: "{{URL::to('/contact/store')}}",
-            data: getInputs(),
-            dataType: 'JSON',
-            success: function() {
-
-
-                if (result == 'unique') {
-                    console.log('Inserted')
-                    reset()
-                    $('#modal').modal('hide')
-                    getRecords();
-                } else {
-                    $('#error_email').html('<label class="text-danger">Email not Available</label>');
-                    $('#email').addClass('has-error');
-                    $('#register').attr('disabled', 'disabled');
-                }
-
-
-
-            }
+            url: "{{url('contact/store')}}",
+            method: "POST",
+            dataType: "JSON",
+            data:{
+                'email':email            } 
         })
-    }
+        .done(function(response) {
+            if (response.success == false) {
+                
+                $('#availability').html(response.message);
+            }
+        });
+
+    });
+
+    // if (response.success == flase) {
+    //             // $('#modal').modal('hide');
+    //             var html = 'Email is already available';
+    //             $('#availability').html(html);
+    //         }
 
 
 
@@ -335,19 +372,19 @@
 
 
     $('#country_name').on('keyup', function() {
-                $value = $(this).val();
-                
-                $.ajax({
-                    type: 'get',
-                    url: "{{URL::to('search')}}",
-                    data: {
-                        'search': $value
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        $('tbody').html(data);
-                    }
-                });
+        $value = $(this).val();
+
+        $.ajax({
+            type: 'get',
+            url: "{{URL::to('search')}}",
+            data: {
+                'search': $value
+            },
+            success: function(data) {
+                console.log(data);
+                $('tbody').html(data);
+            }
+        });
     });
 </script>
 @endsection

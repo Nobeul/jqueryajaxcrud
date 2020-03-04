@@ -40,6 +40,16 @@ class ContactController extends Controller
 
     public function postStore(Request $request)
     {
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|unique:contacts,email',
+        //     'password' => 'required',
+        // ]);
+        $email = Contact::where(['email' => $request->email])->first();
+        // dd("Result ". $email);
+        if(count($email)>0){
+            return ['success' => false, 'message' => 'Email already taken'];
+        }else{
         $contact = new Contact;
         $contact->name = $request->name;
         $contact->email = $request->email;
@@ -47,6 +57,8 @@ class ContactController extends Controller
 
         $contact->save();
         return ['success' => true, 'message' => 'Data Inserted'];
+    }
+       
     }
 
     public function postEdit($id)
@@ -113,5 +125,7 @@ class ContactController extends Controller
         }
     }
 }
-
-// Duplicate email and search functionality add tomorrow
+// search functionality done
+// Duplicate email check
+// Add confirm password field
+// Make a login panel
