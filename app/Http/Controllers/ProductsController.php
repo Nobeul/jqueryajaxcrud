@@ -9,30 +9,48 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $product = Product::all()->pluck('product_name')->toArray();
-        // dd($product);
-        return view('ajax.search',compact('product'));
         
+        return view('products.productlist');
     }
-    public function search(Request $request)
+    
+    function fetch(Request $request)
     {
-        if ($request->ajax()) {
-            $output = "";
-            $products = Product::where('product_name', 'LIKE', '%' . $request->search . "%")->get();
-            if ($products) {
-                foreach ($products as $key => $product) {
-                    $output .= '<tr>' .
-                        '<td>' . $product->product_name . '</td>' .
-                        '<td>' . $product->quantity . '</td>' .
-                        '</tr>';
-                }
-                return Response($output);
+        if ($request->get('query')) {
+            $query = $request->get('query');
+            $data = Product::where('name', 'LIKE', '%' . $query . '%')->get();
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            foreach ($data as $row) {
+                $output .= '<li onclick="addingProduct(this)" id= "result-'.$row->id.'">' . $row->name . '</li>';
+                // $output .= '<li style="display: none">' . $row->price . '</li>';
+                // $output .= '<li style="display: none">' . $row->id . '</li>';
+                // $output .= $row->id;
+                
             }
+            $output .= '</ul>';
+            // dd(gettype($output));
+            return $output;
         }
     }
+    public function getData(Request $request)
+    {
+        $query = $request->get('query');
+        return Product::where('name', 'LIKE', '%' . $query . '%')->get();
+    }
+    public function productStore(Request $request)
+    {
+        $product = new Product;
+        $product->name = $request->name;
+        $product->email = $request->email;
+        $product->password = $request->password;
 
-    public function view(){
-        $product = Product::get();
-        return view('ajax.view',compact('product'));
+        $product->save();
+        return ['success' => true, 'message' => 'Data Inserted'];
+    }
+
+    public function addProduct(Request $request)
+    {
+        $id      = $request->id;
+        $product = Product::find($id); // return obj
+        return json_encode($product);  
     }
 }

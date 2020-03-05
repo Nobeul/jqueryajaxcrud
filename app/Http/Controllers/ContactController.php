@@ -88,7 +88,7 @@ class ContactController extends Controller
         }
     }
 
-
+    
     // For searching 
     public function search(Request $request)
     {

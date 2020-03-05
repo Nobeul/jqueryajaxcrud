@@ -10,4 +10,7 @@ class PagesController extends Controller
     public function login(){
         return view('admin.login');
     }
+    public function products(){
+        return view('products.productlist');
+    }
 }

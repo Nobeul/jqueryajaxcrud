@@ -327,60 +327,7 @@
         }
     });
 
-    // Autocomplete ajax
-    // $(document).ready(function() {
-
-    //     $('#country_name').keyup(function() {
-    //         var query = $(this).val();
-    //         if(query == ''){
-    //             $('#countryList').hide();
-    //         }
-    //         if (query != '') {
-    //             var _token = $('input[name="_token"]').val();
-    //             $.ajax({
-    //                 url: "{{ route('autocomplete.fetch') }}",
-    //                 method: "POST",
-    //                 data: {
-    //                     query: query,
-    //                     _token: _token
-    //                 },
-    //                 success: function(data) {
-    //                     $('#countryList').fadeIn();
-    //                     $('#countryList').html(data);
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     $(document).on('click', 'li', function() {
-    //         $('#country_name').val($(this).text());
-    //         $('#countryList').fadeOut();
-
-    //     //     $.ajax({
-    //     //     //Ajax get request
-    //     //     // type: 'get',
-    //     //     // url: "{{URL::to('/contact/data')}}",
-    //     //     success: function(data) {
-    //     //         // console.log(data);
-    //     //         var html = '';
-    //     //         // data.forEach(function(row) {
-    //     //             html += '<tr>'
-    //     //             html += '<td> id </td>'
-    //     //             html += '<td> Name </td>'
-    //     //             html += '<td> Email </td>'
-    //     //             html += '<td> Password </td>'
-    //     //             html += '<td>'
-    //     //             html += '<button type="button" class="btn btn-warning btnEdit" title="Edit Record">Edit</button>'
-    //     //             html += '<button type="button"  class="btn btn-danger tableDltBtn" style="margin-left:10px" data-toggle="modal" data-target="#DeleteModal" title="Delete Record">Delete</button>'
-    //     //             html += '</td></tr>';
-    //     //         // })
-    //     //         $('table tbody').html(html)
-    //     //     }
-    //     // });
-    //     });
-
-    // });
-    // Autocomplete ends here
+   
 
 
     $('#country_name').on('keyup', function() {

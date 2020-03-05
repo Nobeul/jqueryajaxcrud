@@ -52,3 +52,12 @@ Route::get('/login','PagesController@login');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/products', 'PagesController@products')->name('products');
+
+//Products routes are here
+Route::get('/products/index', 'ProductsController@index')->name('products.index');
+Route::post('/products/fetch', 'ProductsController@fetch')->name('products.fetch');
+Route::post('/products/productStore', 'ProductsController@fetch')->name('products.store');
+Route::post('/products/add', 'ProductsController@addProduct')->name('products.addProduct');
+
+

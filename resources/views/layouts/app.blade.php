@@ -33,8 +33,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li> <a href="{{route('home')}}" style="color: rgb(136, 129, 129)">Home</a> </li>
-                        <li> <a href="{{route('contactRoute')}}" style="color: rgb(136, 129, 129); padding-left: 10px">Contact List</a> </li>
+                        <li> <a href="{{route('home')}}" class="navITEAM" style="color: rgb(136, 129, 129)">Home</a> </li>
+                        <li> <a href="{{route('contactRoute')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">Contacts</a> </li>
+                        <li> <a href="{{route('products')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">Products</a> </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
