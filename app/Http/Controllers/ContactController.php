@@ -12,20 +12,7 @@ class ContactController extends Controller
     {
         return view('jqueryAjaxCrud.contactList');
     }
-    //autocomplete fetch
-    function fetch(Request $request)
-    {
-        if ($request->get('query')) {
-            $query = $request->get('query');
-            $data = Contact::orderBy('id', 'desc')->where('name', 'LIKE', "%{$query}%")->get();
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-            foreach ($data as $row) {
-                $output .= '<li><a href="#">' . $row->name . '</a></li>';
-            }
-            $output .= '</ul>';
-            echo $output;
-        }
-    }
+  
 
 
     public function getIndex()
@@ -40,11 +27,7 @@ class ContactController extends Controller
 
     public function postStore(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|unique:contacts,email',
-        //     'password' => 'required',
-        // ]);
+        
         $email = Contact::where(['email' => $request->email])->first();
         // dd("Result ". $email);
         if(count($email)>0){

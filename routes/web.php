@@ -29,12 +29,12 @@ Route::get('/ajax', function () {
 // })->name('dynamic-field.insert');
 Route::get('/contact/index', 'ContactController@getIndex');
 
-Route::get('/', 'ProductsController@index');
+Route::get('/', 'HomeController@index');
 // Route::get('/search', 'ProductsController@search');
-Route::get('/view', 'ProductsController@view');
+// Route::get('/view', 'ProductsController@view');
 
 //jqueryAjax routes are here
-Route::get('/contact/list', 'ContactController@getlist');
+Route::get('/contact/list', 'ContactController@getlist')->name('contactRoute');
 Route::get('/contact/data', 'ContactController@getData');
 Route::post('/contact/store', 'ContactController@postStore')->name('store');
 Route::post('/contact/update', 'ContactController@postUpdate')->name('update');
@@ -45,3 +45,10 @@ Route::get('/autocomplete', 'ContactController@getlist');
 Route::post('/autocomplete/fetch', 'ContactController@fetch')->name('autocomplete.fetch');
 
 Route::get('/search','ContactController@search');
+
+// pages controller
+Route::get('/login','PagesController@login');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
