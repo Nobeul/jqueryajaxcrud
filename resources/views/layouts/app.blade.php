@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('public/js/app.js') }}" defer></script>
+    <!-- <script src="{{ asset('public/js/app.js') }}" defer></script> -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +18,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -35,7 +37,8 @@
                     <ul class="navbar-nav mr-auto">
                         <li> <a href="{{route('home')}}" class="navITEAM" style="color: rgb(136, 129, 129)">Home</a> </li>
                         <li> <a href="{{route('contactRoute')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">Contacts</a> </li>
-                        <li> <a href="{{route('products')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">Products</a> </li>
+                        <li> <a href="{{route('products')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">Place an order</a> </li>
+                        <li> <a href="{{route('viewOrders')}}" class="navITEAM" style="color: rgb(136, 129, 129); padding-left: 10px">View Order list</a> </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

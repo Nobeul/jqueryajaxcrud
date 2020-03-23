@@ -53,7 +53,7 @@
                     <div class="modal-body">
                         <input type="hidden" name="id">
 
-                        <div class="form-group">
+                        <div class="form-group"> 
                             <label for="exampleFormControlInput1">Name</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name here">
                         </div>
@@ -126,7 +126,7 @@
             //Ajax get request
             type: 'get',
             url: "{{URL::to('/contact/data')}}",
-            success: function(data) {
+            success: function(data) { 
                 // console.log(data);
                 var html = '';
                 data.forEach(function(row) {
@@ -328,7 +328,6 @@
     });
 
    
-
 
     $('#country_name').on('keyup', function() {
         $value = $(this).val();

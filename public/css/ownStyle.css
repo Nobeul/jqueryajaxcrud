@@ -1,8 +1,12 @@
 label.error {
 
     color: red;
+    display: block !important;
 }
 
+/* label{
+    display: block !important;
+} */
 .box {
     width: 600px;
     margin: 0 auto;

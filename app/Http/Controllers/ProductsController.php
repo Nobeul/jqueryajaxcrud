@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Product;
+use App\OrderDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\User;
 
 class ProductsController extends Controller
 {
@@ -18,12 +22,10 @@ class ProductsController extends Controller
         if ($request->get('query')) {
             $query = $request->get('query');
             $data = Product::where('name', 'LIKE', '%' . $query . '%')->get();
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            $output = '<ul class="dropdown-menu" style="position:absolute;display:block;top:30%;left:9%;width:250px">';
             foreach ($data as $row) {
-                $output .= '<li onclick="addingProduct(this)" id= ' . $row->id . '>' . $row->name . '</li>';
+                $output .= '<li onclick="addingProduct(this)" class="listItems" id= ' . $row->id . '>' . $row->name . '</li>';
                 // $output .= '<li style="display: none">' . $row->price . '</li>';
-                // $output .= '<li style="display: none">' . $row->id . '</li>';
-                // $output .= $row->id;
 
             }
             $output .= '</ul>';
@@ -36,43 +38,57 @@ class ProductsController extends Controller
         $query = $request->get('query');
         return Product::where('name', 'LIKE', '%' . $query . '%')->get();
     }
-    public function productStore(Request $request)
+
+    public function orderStore(Request $request)
     {
+        // $uid = User::get('id');
 
-        // dd($request->all());
-        // $product = new Product;
-        // $product = [
-        //     [
-        //         $product->productName => $request->productName, 
-        //         $product->productCategory => $request->productCategory,
-        //         $product->productPrice => $request->productPrice
-        //     ]
-        // ];
-
-        // // $product->productName = $request->productName;
-        // // $product->productCategory = $request->productCategory;
-        // // $product->productPrice = $request->productPrice;
-        // dd($product);
-
-        // $product->save();
         $insert_data = [];
-        $name = $request->name;
-        $category = $request->category;
+        $product_id = $request->id;
+        // dd($product_id);
+        $quantity = $request->quantity;
         $price = $request->price;
 
-        // dd($productName);
-        for ($count = 0; $count < count($name); $count++) {
-            $data = array(
-                'name' => $name[$count],
-                'category'  => $category[$count],
-                'price'  => $price[$count]
-            );
-            $insert_data[] = $data;
-        }
+        $order_id = Order::get('id');
+        // dd($order_id);
+        // foreach ($order_id as $id) {
+
+            // order number starts here
+            // $order_number = Order::orderBy('id', 'desc')->first('order_number');
+
+            // $order_number = substr($order_number->order_number, 6);
+            // $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
+            // $order_number = 'order-' . $order_number;
+            // order number ends here
+            for ($count = 0; $count < count($product_id); $count++) {
+                $data = array(
+                    'product_id'  => $product_id[$count],
+                    'quantity'  => $quantity[$count],
+                    'price'  => $price[$count],
+                    // 'order_number' => $order_number
+
+                );
+                $data['order_id'] = 1;
+                // dd($data);
+                $data['price'] = $data['quantity'] * $data['price'];
+                $insert_data[] = $data;
+            }
+        // }
         // dd($insert_data);
-        
-        Product::insert($insert_data);
-        return ['success' => true, 'message' => 'Data Inserted'];
+        OrderDetails::insert($insert_data);
+        return redirect('/getorder');
+    }
+
+
+    public function updateOrder(Request $request)
+    {
+        $order = Order::find($request->id);
+        $order->quantity = $request->quantity;
+        $order->price = $request->price;
+
+        $order->save();
+        // return view('jqueryAjaxCrud.updateContact');
+        return ['success' => true, 'message' => 'Data Updated'];
     }
 
     public function addProduct(Request $request)
@@ -82,5 +98,36 @@ class ProductsController extends Controller
         // dd($id);
         $product = Product::find($id); // return obj
         return $product;
+    }
+
+
+    public function getorder()
+    {
+        // $order = Order::select(DB::raw('order_number, sum(price) as total_price, sum(quantity) as total_qty'))
+        //              ->groupBy('order_number')
+        //              ->orderBy('order_number','desc')
+        //              ->get();
+
+
+        // $order = OrderDetails::rightJoin('orders', 'orders.id', '=', 'order_details.order_id')->get();
+        // $orders = Order::all();
+        // foreach($orders as $order) {
+
+        //     $total = DB::table('order_details')
+        //         ->where('order_id', '=', $order->id)
+        //         ->sum('order_details.price');
+        //     echo $order->id." Total = ". $total ."<br>";
+
+        // }
+
+        // exit;
+        $order = OrderDetails::select(DB::raw('id, sum(price) as total_price, sum(quantity) as total_quantity'))
+            ->rightJoin('orders', 'orders.id', '=', 'order_details.order_id')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        dd($order);
+
+        return view('order.order')->with('order', $order);
     }
 }

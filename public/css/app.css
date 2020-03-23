@@ -9478,3 +9478,37 @@ a.text-dark:hover {
     color: rgb(136, 129, 129); 
     padding-left: 10px;
 } */
+.inputAutocomplete{
+    text-align: center;
+}
+.listStyle th{
+    background-color: yellow;
+}
+.listItems{
+    padding-left:10px;
+}
+.listItems:hover{
+    border: 1px solid black;
+}
+.dltIcon{
+    padding-left: 30px;
+}
+.dropmnu{
+    display:block;
+    position:relative;
+}
+label.error {
+
+    color: red;
+    display: block !important;
+}
+.parsley-required{
+    color: red;
+    list-style: none;
+    margin-left: -28px;
+}
+.parsley-type{
+    color: red;
+    list-style: none;
+    margin-left: -62px;
+}
