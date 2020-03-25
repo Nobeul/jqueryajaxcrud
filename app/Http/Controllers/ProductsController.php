@@ -50,32 +50,35 @@ class ProductsController extends Controller
         $price = $request->price;
 
         $order_id = Order::get('id');
-        // dd($order_id);
+        dd($order_id);
         // foreach ($order_id as $id) {
 
-            // order number starts here
-            // $order_number = Order::orderBy('id', 'desc')->first('order_number');
+        // order number starts here
+        $order_number = Order::orderBy('id', 'desc')->first('order_number');
 
-            // $order_number = substr($order_number->order_number, 6);
-            // $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
-            // $order_number = 'order-' . $order_number;
-            // order number ends here
-            for ($count = 0; $count < count($product_id); $count++) {
-                $data = array(
-                    'product_id'  => $product_id[$count],
-                    'quantity'  => $quantity[$count],
-                    'price'  => $price[$count],
-                    // 'order_number' => $order_number
-
-                );
-                $data['order_id'] = 1;
-                // dd($data);
-                $data['price'] = $data['quantity'] * $data['price'];
-                $insert_data[] = $data;
-            }
-        // }
+        $order_number = substr($order_number->order_number, 6);
+        $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
+        $order_number = 'order-' . $order_number;
+        // order number ends here
+        for ($count = 0; $count < count($product_id); $count++) {
+            $data = array(
+                'product_id'  => $product_id[$count],
+                'quantity'  => $quantity[$count],
+                'price'  => $price[$count],
+            );
+            $data['order_id'] = 1;
+            // dd($data);
+            $data['price'] = $data['quantity'] * $data['price'];
+            $insert_data[] = $data;
+        }
         // dd($insert_data);
         OrderDetails::insert($insert_data);
+        $order = array(
+            'user_id' => 1,
+            'grand_total' => $data['price'],
+            'order_number' => $order_number
+        );
+        Order::insert($order);
         return redirect('/getorder');
     }
 
@@ -103,30 +106,25 @@ class ProductsController extends Controller
 
     public function getorder()
     {
-        // $order = Order::select(DB::raw('order_number, sum(price) as total_price, sum(quantity) as total_qty'))
-        //              ->groupBy('order_number')
-        //              ->orderBy('order_number','desc')
-        //              ->get();
+        // $order = Order::select(DB::raw('order_id, order_number, sum(price) as total_price, sum(quantity) as total_quantity'))
+        //     ->from('orders')
+        //     ->rightJoin('order_details', 'order_details.order_id', '=' , 'orders.id')
+        //     ->orderBy('orders.id','desc')
+        //     ->groupBy('order_details.Order_id')
+        //     ->get();
 
-
-        // $order = OrderDetails::rightJoin('orders', 'orders.id', '=', 'order_details.order_id')->get();
-        // $orders = Order::all();
-        // foreach($orders as $order) {
-
-        //     $total = DB::table('order_details')
-        //         ->where('order_id', '=', $order->id)
-        //         ->sum('order_details.price');
-        //     echo $order->id." Total = ". $total ."<br>";
-
-        // }
-
-        // exit;
-        $order = OrderDetails::select(DB::raw('id, sum(price) as total_price, sum(quantity) as total_quantity'))
-            ->rightJoin('orders', 'orders.id', '=', 'order_details.order_id')
-            ->orderBy('id', 'desc')
+        $order = Order::join('order_details', function ($join) {
+            $join->on('order_details.order_id', '=', 'orders.id');
+        })
+            ->select([
+                'orders.id', 'order_details.order_id', 'orders.order_number',
+                DB::raw('sum(order_details.quantity) as qty'),
+                DB::raw('sum(order_details.price) as prc')
+            ])
+            ->groupBy('order_details.Order_id')
             ->get();
 
-        dd($order);
+        // dd($order);
 
         return view('order.order')->with('order', $order);
     }

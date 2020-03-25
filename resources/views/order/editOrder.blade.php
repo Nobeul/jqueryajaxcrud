@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')
+@section('content') 
 
 <form method="post" id="formID" action="{{route('updateOrders')}}" data-parsley-validate="">
     {{csrf_field()}}
