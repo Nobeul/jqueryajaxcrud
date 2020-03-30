@@ -65,3 +65,4 @@ Route::get('/updateOrder/{id}', 'OrdersController@editOrder')->name('editOrders'
 Route::post('/updateOrder', 'OrdersController@update_Order')->name('updateOrders');
 Route::post('/deleteOrder', 'OrdersController@order_delete')->name('deleteOrders');
 
+

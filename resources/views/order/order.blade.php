@@ -40,7 +40,7 @@
                 <th scope="row"><?php echo $i++; ?></th>
                 <td>{{$odr->order_number}}</td>
                 <td>{{$odr->qty}}</td>
-                <td>{{$odr->prc}}</td>
+                <td>{{$odr->grand_total}}</td>
                 <td>
                     <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px" href="{{route('editOrders', $odr->id)}}"><i class="fas fa-edit"></i></a>
                 </td>

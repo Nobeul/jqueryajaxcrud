@@ -9,4 +9,5 @@
 <script src="{{asset('https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')}}"></script>
 
 <!-- Login jquery -->
-<script src="{{asset('public/js/customjs/custom.js')}}"></script>
+<!-- <script src="{{asset('public/js/customjs/custom.js')}}"></script> -->
+<script src="{{asset('js/customjs/custom.js')}}"></script>

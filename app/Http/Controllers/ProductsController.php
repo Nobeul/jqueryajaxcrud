@@ -8,6 +8,7 @@ use App\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -41,18 +42,12 @@ class ProductsController extends Controller
 
     public function orderStore(Request $request)
     {
-        // $uid = User::get('id');
-
+        $userId = Auth::id();
         $insert_data = [];
         $product_id = $request->id;
         // dd($product_id);
         $quantity = $request->quantity;
         $price = $request->price;
-
-        $order_id = Order::get('id');
-        dd($order_id);
-        // foreach ($order_id as $id) {
-
         // order number starts here
         $order_number = Order::orderBy('id', 'desc')->first('order_number');
 
@@ -61,27 +56,38 @@ class ProductsController extends Controller
         $order_number = 'order-' . $order_number;
         // order number ends here
         for ($count = 0; $count < count($product_id); $count++) {
+
+            $data = array(
+                'quantity'  => $quantity[$count],
+                'price'  => $price[$count],
+            );
+            $grand_total = $data['quantity'] * $data['price'];
+        }
+        $order = array(
+            'user_id' => $userId,
+            'grand_total' => $grand_total,
+            'order_number' => $order_number
+        );
+        // dd($order);
+        Order::insert($order);
+
+        $search_order = Order::where('order_number', $order_number)->value('id');
+        
+        for ($count = 0; $count < count($product_id); $count++) {
             $data = array(
                 'product_id'  => $product_id[$count],
                 'quantity'  => $quantity[$count],
                 'price'  => $price[$count],
+                'order_id' => $search_order,
             );
-            $data['order_id'] = 1;
             // dd($data);
             $data['price'] = $data['quantity'] * $data['price'];
             $insert_data[] = $data;
         }
         // dd($insert_data);
         OrderDetails::insert($insert_data);
-        $order = array(
-            'user_id' => 1,
-            'grand_total' => $data['price'],
-            'order_number' => $order_number
-        );
-        Order::insert($order);
         return redirect('/getorder');
     }
-
 
     public function updateOrder(Request $request)
     {
@@ -90,7 +96,6 @@ class ProductsController extends Controller
         $order->price = $request->price;
 
         $order->save();
-        // return view('jqueryAjaxCrud.updateContact');
         return ['success' => true, 'message' => 'Data Updated'];
     }
 
@@ -110,22 +115,20 @@ class ProductsController extends Controller
         //     ->from('orders')
         //     ->rightJoin('order_details', 'order_details.order_id', '=' , 'orders.id')
         //     ->orderBy('orders.id','desc')
-        //     ->groupBy('order_details.Order_id')
+        //     ->groupBy('order_details.order_id')
         //     ->get();
 
         $order = Order::join('order_details', function ($join) {
             $join->on('order_details.order_id', '=', 'orders.id');
         })
             ->select([
-                'orders.id', 'order_details.order_id', 'orders.order_number',
-                DB::raw('sum(order_details.quantity) as qty'),
-                DB::raw('sum(order_details.price) as prc')
+                'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total',
+                DB::raw('sum(order_details.quantity) as qty')
+                
             ])
-            ->groupBy('order_details.Order_id')
+            ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'orders.grand_total')
+            ->orderBy('orders.order_number', 'desc')
             ->get();
-
-        // dd($order);
-
-        return view('order.order')->with('order', $order);
+            return view('order.order')->with('order', $order);
     }
 }

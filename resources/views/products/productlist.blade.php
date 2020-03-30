@@ -81,7 +81,7 @@
                     "id": test,
                     "_token": "{{ csrf_token() }}"
                 },
-                success: function(response) {
+                success: function(response) { 
                     var product = response;
 
                     // var row = 0;
@@ -165,7 +165,7 @@
                 var price = parseFloat($("#pr-" + mainID).val());
                 var quantity = parseFloat($("#qt-" + mainID).val());
                 total = price * quantity;
-                // total = total.toFixed(3);
+                total = total.toFixed(3);
                 // alert(total);
 
                 if (isNaN(total)) {
@@ -203,8 +203,6 @@
         console.log(list_id);
     });
 
-
-
     var preNumber = 0;
 
     $(document).on("keydown", ".positive-float-number", function() {
@@ -227,7 +225,6 @@
         } else {
             $(this).val(number.replace(/[^0-9.]/g, ""));
         }
-
     });
 
     function calculateGrandTotal() {
