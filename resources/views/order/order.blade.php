@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="container">
+    <!-- Search -->
+    <input id="myInput" type="text" placeholder="Search here.." style="padding:10px 20px; margin-bottom:15px; width: 300px">
+    <!-- Search -->
+
     <!-- Delete Modal -->
     <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -22,7 +26,7 @@
             </div>
         </div>
     </div>
-    <table class="table">
+    <table class="table align_center" >
         <thead>
             <tr>
                 <th scope="col">Sl</th>
@@ -34,10 +38,10 @@
             </tr>
         </thead>
         <?php $i = 1; ?>
-        <tbody>
+        <tbody id="myTable">
             @foreach($order as $odr)
             <tr>
-                <th scope="row"><?php echo $i++; ?></th>
+                <td scope="row"><?php echo $i++; ?></td>
                 <td>{{$odr->order_number}}</td>
                 <td>{{$odr->qty}}</td>
                 <td>{{$odr->grand_total}}</td>
@@ -50,3 +54,15 @@
     </table>
 </div>
 @endsection
+<script src="{{asset('https://code.jquery.com/jquery-3.4.1.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
