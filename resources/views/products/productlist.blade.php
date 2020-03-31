@@ -51,15 +51,6 @@
 
 <script>
     var quantity_id = [];
-    // $('form#formID').on('submit', function(event) {
-    //     $('.calculate').each(function() {
-    //         $(this).rules("add", {
-    //                 required: true,
-    //                 number: true
-    //         });
-    //     });
-    // });
-    // $("#formID").validate()
     $('#formID').parsley();
 
 
@@ -67,7 +58,6 @@
     var i = 1;
 
     function addingProduct(e) {
-        // console.log(e);
         var test = $(e).attr("id");
         // var id = test.slice(7);
         var list = $.inArray(test, list_id);
@@ -81,11 +71,11 @@
                     "id": test,
                     "_token": "{{ csrf_token() }}"
                 },
-                success: function(response) { 
-                    var product = response;
 
+                success: function(response) {
+                    var product = response;
                     // var row = 0;
-                    // console.log(response);
+                    // console.log(product);
                     var total = product.quantity * product.price;
                     var html = ''
                     html += '<tr id = "tr-' + product.id + '">'
@@ -103,6 +93,7 @@
                         // console.log(quantity_id);
                     });
                 }
+
             });
 
         } else {
@@ -145,7 +136,6 @@
         $(document).on('click', 'li', function() {
             var query = $(this).val();
             var _token = $('input[name="_token"]').val();
-
 
             $('#countryList').fadeOut();
             $('#search').val('');

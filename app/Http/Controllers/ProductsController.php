@@ -23,16 +23,24 @@ class ProductsController extends Controller
         if ($request->get('query')) {
             $query = $request->get('query');
             $data = Product::where('name', 'LIKE', '%' . $query . '%')->get();
-            $output = '<ul class="dropdown-menu" style="position:absolute;display:block;top:30%;left:9%;width:250px">';
-            foreach ($data as $row) {
-                $output .= '<li onclick="addingProduct(this)" class="listItems" id= ' . $row->id . '>' . $row->name . '</li>';
-                // $output .= '<li style="display: none">' . $row->price . '</li>';
+            $output = '<ul class="dropdown-menu" style="position:absolute;display:block;top:32%;left:9%;width:250px">';
+            // dd($data);
+            $gg = $data->toArray();
+            // dd($gg);
+            if (count($gg)>0) {
 
+                foreach ($data as $row) {
+
+
+                    $output .= '<li onclick="addingProduct(this)" class="listItems" id= ' . $row->id . '>' . $row->name . '</li>';
+                }
+            }else{
+                $output .= '<li onclick="addingProduct(this)" class="listItems">Nothing Found</li>';
             }
-            $output .= '</ul>';
-            // dd(gettype($output));
-            return $output;
         }
+        $output .= '</ul>';
+        // dd(gettype($output));
+        return $output;
     }
     public function getData(Request $request)
     {
@@ -72,7 +80,7 @@ class ProductsController extends Controller
         Order::insert($order);
 
         $search_order = Order::where('order_number', $order_number)->value('id');
-        
+
         for ($count = 0; $count < count($product_id); $count++) {
             $data = array(
                 'product_id'  => $product_id[$count],
@@ -124,11 +132,11 @@ class ProductsController extends Controller
             ->select([
                 'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total',
                 DB::raw('sum(order_details.quantity) as qty')
-                
+
             ])
             ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'orders.grand_total')
             ->orderBy('orders.order_number', 'desc')
             ->get();
-            return view('order.order')->with('order', $order);
+        return view('order.order')->with('order', $order);
     }
 }
