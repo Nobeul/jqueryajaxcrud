@@ -66,3 +66,10 @@ Route::post('/updateOrder', 'OrdersController@update_Order')->name('updateOrders
 Route::post('/deleteOrder', 'OrdersController@order_delete')->name('deleteOrders');
 
 
+Route::get('/invoice', function () {
+    return view('admin.invoice');
+});
+
+
+
+
