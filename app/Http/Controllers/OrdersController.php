@@ -16,7 +16,7 @@ class OrdersController extends Controller
         // dd($order_id);
         $order = OrderDetails::with('product', 'order')->where('order_id', $order_id)->get();
         // $order = Order::get();
-        return view('order.editOrder')->with('order', $order);
+        return view('admin.editInvoice')->with('order', $order);
     }
     public function update_Order(Request $request)
     {
@@ -78,5 +78,50 @@ class OrdersController extends Controller
     {
         dd($request->all());
         return back();
+    }
+
+   public function fetch(Request $request)
+    {
+        dd($request->all());
+        if ($request->get('query')) {
+
+            $output = '';
+            $query = $request->get('query');
+            dd($query);
+            if ($query != '') {
+                $data = Order::where('order_number', 'like', '%' . $query . '%')
+                    ->orWhere('grand_total', 'like', '%' . $query . '%')
+                    ->orderBy('order_number', 'desc')
+                    ->get();
+            } else {
+                // $data = DB::table('tbl_customer')
+                //     ->orderBy('CustomerID', 'desc')
+                //     ->get();
+                echo "nope";
+            }
+            $total_row = $data->count();
+            if ($total_row > 0) {
+                foreach ($data as $row) {
+                    $output .= '
+                    <tr>
+                    <td>' . $row->order_number . '</td>
+                    <td>' . $row->grand_total . '</td>
+                    </tr>
+                    ';
+                }
+            } else {
+                $output = '
+                    <tr>
+                        <td align="center" colspan="5">No Data Found</td>
+                    </tr>
+                    ';
+            }
+            $data = array(
+                'table_data'  => $output,
+                // 'total_data'  => $total_row
+            );
+
+            echo json_encode($data);
+        }
     }
 }

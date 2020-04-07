@@ -17,8 +17,23 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+        // dd($request->route()->getPrefix());
+
+        switch ($guard) {
+            case 'admin':
+                if (Auth::guard($guard)->check()) {
+                    // echo "admin route";
+                    // exit();
+                    return redirect('/admin/getorder');
+                }
+                break;
+            default:
+                if (Auth::guard($guard)->check()) {
+                    // echo "login route";
+                    // exit();
+                    return redirect('/home');
+                }
+                break;
         }
 
         return $next($request);

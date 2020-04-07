@@ -15,7 +15,7 @@ class ProductsController extends Controller
     public function index()
     {
 
-        return view('products.productlist');
+        return view('products.productlist'); 
     }
 
     function fetch(Request $request)
@@ -136,7 +136,7 @@ class ProductsController extends Controller
             ])
             ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'orders.grand_total')
             ->orderBy('orders.order_number', 'desc')
-            ->get();
-        return view('order.order')->with('order', $order);
+            ->paginate(5);
+        return view('admin.invoice')->with('order', $order);
     }
 }
