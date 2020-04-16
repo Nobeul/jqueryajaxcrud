@@ -8,13 +8,19 @@
             <div class="container" id="printTable">
                 <div>
                     <div class="card">
-
                         <div class="card-block">
+                            <div class="form-group">
+                                <span class="">Search Product</span>
+                                <input type="text" name="search" id="search" class="form-control" style="width: 200px" placeholder="Search here..." />
+                            </div>
+
+                            <div id="countryList">
+                            </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <form method="post" id="formID" action="{{route('updateOrders')}}" data-parsley-validate="">
                                         {{csrf_field()}}
-
+                                        
                                         @php
                                         $grand_total = 0;
                                         $order_id = 0
@@ -30,35 +36,35 @@
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="myTable">
+                                                <tbody id="myTable" class="addProduct">
                                                     @foreach($order as $odr)
                                                     @php
                                                     $grand_total = $odr->order->grand_total;
                                                     $order_id = $odr->order_id;
-
+                                                    
                                                     @endphp
-                                                    <tr id="{{$odr->id}}">
+                                                    <tr id="tr-{{$odr->product_id}}" data-rel="{{$odr->product_id}}" class="tblcls">
                                                         <input type="hidden" name="id[]" value="{{$odr->id}}">
-                                                        <input type="hidden" name="product_id[]" value="{{$odr->product_id}}">
+                                                        <input type="hidden" name="order_id" value="{{$odr->order->id}}">
+                                                        <input type="hidden" name="product_id[]" 
+                                                        value="{{$odr->product_id}}">
 
                                                         <td>{{$odr->product->name}}</td>
 
-                                                        <td><input type="text" style="text-align: center" class="calculate quantity data-parsley-validate positive-float-number" id="quantity{{$odr->id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="quantity[]" value="{{$odr->quantity}}"></td>
+                                                        <td><input type="text" style="text-align: center" class="calculate quantity data-parsley-validate positive-float-number" id="qt-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="quantity[]" value="{{$odr->quantity}}"></td>
 
-                                                        <td><input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="price{{$odr->id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->price}}"></td>
+                                                        <td><input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="pr-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->product->price}}"></td>
 
                                                         <td>
-                                                            <div class="total" id="total{{$odr->id}}">{{$odr->price*$odr->quantity}}</div>
+                                                            <div class="total" id="total-{{$odr->product_id}}">{{$odr->product->price*$odr->quantity}}</div>
                                                         </td>
                                                         <td><a type="submit" class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                                                     </tr>
                                                     @endforeach
                                                     <input type="hidden" name="grand_total" id="hiddenTotal" value="{{$grand_total}}">
-                                                    <input type="hidden" name="order_id" value="{{$order_id}}">
-
+     
                                                 </tbody>
                                             </table>
-
                                         </div>
                                 </div>
                             </div>
@@ -93,7 +99,6 @@
                                     <button type="submit" id="order" class="btn btn-primary submitBtn">Update Order</button>
                                 </div>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -116,6 +121,120 @@
 
 <script>
     $('#formID').parsley();
+    var list_id = [];
+    var i = 1;
+    var quantity_id = [];
+    var backend_list_id = [];
+
+    function addingProduct(e) {
+        var test = $(e).attr("id");
+        $('.tblcls').each(function() {
+            var rel = $(this).attr("data-rel");
+            var inArr = $.inArray(rel, backend_list_id);
+            if (inArr == -1) {
+                backend_list_id.push(rel);
+            }
+        });
+        var list = $.inArray(test, list_id);
+        var backend_list = $.inArray(test, backend_list_id);
+        console.log(list);
+        console.log(backend_list);
+        
+        if(backend_list != -1){
+            var dataRel = parseFloat($('#qt-' + test).val());
+            if (isNaN(dataRel)) {
+                $('#qt-' + test).val(1);
+            } else {
+                dataRel = dataRel + 1;
+                $('#qt-' + test).val(dataRel);
+            }
+        }
+        else if ((list == -1)) {
+            list_id.push(test);
+            $.ajax({
+                url: "{{ route('products.addProduct') }}",
+                method: "POST",
+                data: {
+                    "id": test,
+                    "_token": "{{ csrf_token() }}"
+                },
+
+                success: function(response) {
+                    var product = response;
+                    // var row = 0;
+                    // console.log(product);
+                    var total = product.quantity * product.price;
+                    var html = ''
+                    html += '<tr id = "tr-' + product.id + '" name="new">'
+                    // html += '<input type="hidden" name="id[]"  value = "' + <?php echo $odr->id ?> + '"/>'
+
+                    html += '<input type="hidden" name="p_id[]"  value = "' + product.id + '"/>'
+                    html += '<td><div">' + product.name + '</div></td>'
+                    html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number quantity errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "qt-' + product.id + '"  name="qty[]" value = "1"/>'
+                    html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number price errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "pr-' + product.id + '"  name="prc[]"  value = "' + product.price + '"/>'
+                    html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.price + '</div></td>'
+                    html += '<td><span class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></span></td>'
+                    html += '</tr>';
+                    $('.addProduct').append(html);
+                    $('.quantity').each(function() {
+                        var quantityid = $(this).attr('data-rel');
+                        quantity_id.push(quantityid);
+                        // console.log(quantity_id);
+                    });
+                }
+
+            });
+
+        }
+        else {
+
+            var dataRel = parseFloat($('#qt-' + test).val());
+            if (isNaN(dataRel)) {
+                $('#qt-' + test).val(1);
+            } else {
+                dataRel = dataRel + 1;
+                $('#qt-' + test).val(dataRel);
+            }
+        }
+    }
+    $(document).ready(function() {
+
+        $('#search').keyup(function() {
+            var query = $(this).val();
+            if (query == '') {
+                $('#countryList').hide();
+            }
+            if (query != '') {
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('products.fetchProducts') }}",
+                    method: "POST",
+                    data: {
+                        query: query,
+                        _token: _token
+                    },
+                    success: function(data) {
+                        $('#countryList').show();
+                        $('#countryList').html(data);
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', 'li', function() {
+        var query = $(this).val();
+        var _token = $('input[name="_token"]').val();
+
+        $('#countryList').fadeOut();
+        $('#search').val('');
+
+        setTimeout(function() {
+            calculateGrandTotal();
+        }, 100);
+        calculateTotal();
+
+    });
 
     $(document).on('click', '.dltBtn', function() {
         var trId = $(this).parent().parent().attr('id');
@@ -151,23 +270,26 @@
         var total = 1;
         $('.calculate').each(function() {
             var mainID = $(this).parent().parent().attr('id');
-            // var mainID = mainID.slice(3);
-            var price = parseFloat($("#price" + mainID).val());
-            var quantity = parseFloat($("#quantity" + mainID).val());
+            mainID = mainID.slice(3);
+            // console.log(mainID);
+            var price = parseFloat($("#pr-" + mainID).val());
+            var quantity = parseFloat($("#qt-" + mainID).val());
             total = price * quantity;
             total = total.toFixed(3);
+            // console.log(total);
             if (isNaN(total)) {
                 total = '0.00';
-                $("#total" + mainID).text(total);
+                $("#total-" + mainID).text(total);
                 // console.log("NAN");
             } else {
                 // alert(total);
-                $("#total" + mainID).text(total);
+                $("#total-" + mainID).text(total);
                 // console.log(total);
 
             }
         });
     }
+    calculateGrandTotal();
 
     $(document).on('keyup', '.calculate', function() {
         calculateTotal();

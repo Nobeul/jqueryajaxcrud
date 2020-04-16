@@ -1,20 +1,5 @@
 @extends('admin.masteradmin')
 @section('content')
-<ul class="menu" role="menu">
-    <li>
-        <form action="{{route('admin.logout')}}" method="POST">
-            {{csrf_field()}}
-            <button type="submit" class="btn">Log out</button>
-        </form>
-    </li>
-</ul>
-<!-- Search -->
-<!-- <form>
-    {{csrf_field()}}
-    <input type="text" name="search" id="search" placeholder="Search here.." style="padding:10px 20px; margin-bottom:15px; width: 300px">
-     <input type="text" name="search" id="search" class="form-control" placeholder="Search here..." /> -->
-<!-- </form>  -->
-<!-- Search -->
 <div class="main-body">
     <div class="page-wrapper">
         <!-- [ Main Content ] start -->
@@ -23,7 +8,6 @@
             <div class="container" id="printTable">
                 <div>
                     <div class="card">
-
                         <div class="card-block">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -31,20 +15,24 @@
                                         <table class="table  invoice-detail-table  align_center" id="myTable">
                                             <thead>
                                                 <tr class="thead-default">
-                                                    <th>Order Number</th>
-                                                    <th>Total Quantity</th>
-                                                    <th>Total Amount</th>
+                                                    <th>Product Number</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($order as $odr)
+                                                @foreach($products as $product)
                                                 <tr>
-                                                    <td>{{$odr->order_number}}</td>
-                                                    <td>{{$odr->qty}}</td>
-                                                    <td>{{$odr->grand_total}}</td>
+                                                    <td>{{$product->name}}</td>
+                                                    <td>{{$product->quantity}}</td>
+                                                    <td>{{$product->price}}</td>
                                                     <td>
-                                                        <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px" href="{{route('editOrders', $odr->id)}}"><i class="fas fa-edit"></i></a>
+                                                        <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px; margin-left: 30%; display: block; float:left" href="{{route('view.editProduct',$product->id)}}"><i class="fas fa-edit"></i></a>
+                                                        <!-- <form action="{{route('delete.product',$product->id)}}" method="POST">
+                                                            {{csrf_field()}} -->
+                                                            <button type="submit" class="btn btn-success btn-sm delete" style="color:white; margin-bottom: 10px; display:block"><i class="fa fa-trash"></i></button>
+                                                        <!-- </form> -->
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -68,12 +56,12 @@
         <!-- [ Main Content ] end -->
     </div>
 </div>
-</section>
-<!-- [ Main Content ] end -->
-<!-- Required Js -->
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
+<script>
+
+</script>
 <script>
     // print button
     function printData() {
@@ -87,12 +75,30 @@
     $('.btn-print-invoice').on('click', function() {
         printData();
     })
-
     // yajra datatables
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
-   
+    //Ajax delete 
+    $(document).on('click', '.delete', function(){
+        var id = $(this).attr('id');
+        if(confirm("Are you sure you want to Delete this data?"))
+        {
+            $.ajax({
+                url:"{{route('delete.product',$product->id)}}",
+                mehtod:"post",
+                data:{id:id},
+                success:function(data)
+                {
+                    alert(data);
+                    // $('#student_table').DataTable().ajax.reload();
+                }
+            })
+        }
+        else
+        {
+            return false;
+        }
+    }); 
 </script>
-
 @endsection

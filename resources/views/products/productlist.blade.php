@@ -33,7 +33,6 @@
                     <tbody class="addProduct">
                     </tbody>
                     <tr class="grandTotal">
-                        <!-- <input type="hidden" name="total" value="15,999.99999920$" id="grandTotalInput"> -->
                         <th colspan="3" class="text-right">Grand Total: </th>
                         <td>
                             <span id="grandTotal"></span>
@@ -226,6 +225,7 @@
         // grandTotal = grandTotal.toFixed(3);
         $('#grandTotal').text(grandTotal);
     }
+
 </script>
 
 @endsection

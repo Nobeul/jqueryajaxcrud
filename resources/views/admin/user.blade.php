@@ -9,11 +9,7 @@
     </li>
 </ul>
 <!-- Search -->
-<!-- <form>
-    {{csrf_field()}}
-    <input type="text" name="search" id="search" placeholder="Search here.." style="padding:10px 20px; margin-bottom:15px; width: 300px">
-     <input type="text" name="search" id="search" class="form-control" placeholder="Search here..." /> -->
-<!-- </form>  -->
+
 <!-- Search -->
 <div class="main-body">
     <div class="page-wrapper">
@@ -31,20 +27,26 @@
                                         <table class="table  invoice-detail-table  align_center" id="myTable">
                                             <thead>
                                                 <tr class="thead-default">
-                                                    <th>Order Number</th>
-                                                    <th>Total Quantity</th>
-                                                    <th>Total Amount</th>
+                                                    <th>SL</th>
+                                                    <th>User Name</th>
+                                                    <th>User Email</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($order as $odr)
+                                                @php
+                                                $i = 0;
+                                                @endphp
+                                                @foreach($users as $user)
                                                 <tr>
-                                                    <td>{{$odr->order_number}}</td>
-                                                    <td>{{$odr->qty}}</td>
-                                                    <td>{{$odr->grand_total}}</td>
+                                                    <td>{{++$i}}</td>
+                                                    <td>{{$user->name}}</td>
+                                                    <td>{{$user->email}}</td>
                                                     <td>
-                                                        <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px" href="{{route('editOrders', $odr->id)}}"><i class="fas fa-edit"></i></a>
+                                                        <form action="{{route('admin.deluser',$user->id)}}" method="POST">
+                                                            {{csrf_field()}}
+                                                        <button class="btn btn-success btn-sm" type="submit" style="color:white; margin-bottom: 10px"><i class="fa fa-trash"></i></button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -75,24 +77,10 @@
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script>
-    // print button
-    function printData() {
-        var divToPrint = document.getElementById("printTable");
-        newWin = window.open("");
-        newWin.document.write(divToPrint.outerHTML);
-        newWin.print();
-        newWin.close();
-    }
-
-    $('.btn-print-invoice').on('click', function() {
-        printData();
-    })
-
     // yajra datatables
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
-   
 </script>
 
 @endsection

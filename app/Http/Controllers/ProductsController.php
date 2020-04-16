@@ -23,7 +23,7 @@ class ProductsController extends Controller
         if ($request->get('query')) {
             $query = $request->get('query');
             $data = Product::where('name', 'LIKE', '%' . $query . '%')->get();
-            $output = '<ul class="dropdown-menu" style="position:absolute;display:block;top:32%;left:9%;width:250px">';
+            $output = '<ul class="dropdown-menu" style="position:absolute;display:block;top:30%;left:9.1%;width:250px">';
             // dd($data);
             $gg = $data->toArray();
             // dd($gg);
@@ -94,7 +94,7 @@ class ProductsController extends Controller
         }
         // dd($insert_data);
         OrderDetails::insert($insert_data);
-        return redirect('/getorder');
+        return back();
     }
 
     public function updateOrder(Request $request)
@@ -116,27 +116,66 @@ class ProductsController extends Controller
         return $product;
     }
 
-
-    public function getorder()
-    {
-        // $order = Order::select(DB::raw('order_id, order_number, sum(price) as total_price, sum(quantity) as total_quantity'))
-        //     ->from('orders')
-        //     ->rightJoin('order_details', 'order_details.order_id', '=' , 'orders.id')
-        //     ->orderBy('orders.id','desc')
-        //     ->groupBy('order_details.order_id')
-        //     ->get();
-
+    public function orderList(){
+        $userId = Auth::id();
         $order = Order::join('order_details', function ($join) {
             $join->on('order_details.order_id', '=', 'orders.id');
         })
             ->select([
-                'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total',
+                'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total', 'user_id',
                 DB::raw('sum(order_details.quantity) as qty')
 
             ])
-            ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'orders.grand_total')
+            ->groupBy('order_details.order_id', 'orders.id', 'user_id', 'orders.order_number', 'orders.grand_total')
             ->orderBy('orders.order_number', 'desc')
-            ->paginate(5);
-        return view('admin.invoice')->with('order', $order);
+            ->where('user_id', $userId)
+            ->get();
+        return view('products.orderList')->with('order', $order);
     }
+
+    public function editOrder(Request $request)
+    {
+        $order_id = $request->id;
+        $order = OrderDetails::with('product', 'order')->where('order_id', $order_id)->get();
+        return view('order.editOrder')->with('order', $order);
+    }
+    public function productList(){
+        $products = Product::get();
+        return view('admin.productlist')->with('products',$products);
+    }
+
+    public function deleteProduct(Request $request){
+        $product = Product::find($request->id);
+        $product->delete();
+        return back();
+    }
+
+    public function insertProduct(Request $request){
+        $product = new Product;
+        $product->name = $request->name;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+
+        $product->save();
+        return redirect('admin/productlist');
+    }
+    public function viewAddProduct(){
+        return view('admin.addproduct');
+    }
+    public function updateProduct(Request $request){
+        $product = Product::find($request->id);
+        $product->name = $request->name;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+
+        $product->save();
+        return redirect('admin/productlist');
+    }
+
+    public function viewProduct(Request $request){
+        $product = Product::find($request->id);
+        // dd($product);   
+        return view('admin.editproduct')->with('product', $product);
+    }
+    
 }

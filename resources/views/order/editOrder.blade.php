@@ -41,7 +41,7 @@
                             
                             <td><div class="total" id="total{{$odr->id}}">{{$odr->price*$odr->quantity}}</div></td>
                             <td><a type="submit" class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                        </tr>
+                        </tr> 
                         @endforeach
                         <tr class="grandTotal">
                             <th colspan="3" class="text-right">Grand Total: </th>
@@ -95,7 +95,7 @@
         }
     });
 
-
+ 
     function calculateTotal() {
         var total = 1;
         $('.calculate').each(function() {

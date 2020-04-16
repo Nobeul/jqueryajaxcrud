@@ -49,9 +49,11 @@ Route::get('/products', 'PagesController@products')->name('products')->middlewar
 
 //Products routes are here
 Route::get('/products/index', 'ProductsController@index')->name('products.index');
+Route::get('/products/orderlist', 'ProductsController@orderList')->name('products.orderList')->middleware('auth');
 Route::post('/products/fetch', 'ProductsController@fetch')->name('products.fetch');
 Route::post('/products/productStore', 'ProductsController@orderStore')->name('products.store');
 Route::post('/products/add', 'ProductsController@addProduct')->name('products.addProduct');
+Route::get('/products/editorder/{id}', 'ProductsController@editOrder')->name('products.editOrder');
 
 // });
 
@@ -60,11 +62,22 @@ Route::get('/invoice/{id}', 'OrdersController@editOrder')->name('editOrders');
 Route::post('/updateOrder', 'OrdersController@update_Order')->name('updateOrders');
 Route::post('/deleteOrder', 'OrdersController@order_delete')->name('deleteOrders');
 Route::post('/invoice/fetch', 'OrdersController@fetch')->name('order.fetch');
+Route::post('/productlist/fetch', 'OrdersController@fetchProducts')->name('products.fetchProducts');
+
 
 // Admin Routes
 Route::prefix('admin')->group(function(){
-Route::get('/getorder', 'ProductsController@getorder')->name('viewOrders')->middleware('auth:admin');
+Route::get('/getorder', 'OrdersController@getorder')->name('viewOrders')->middleware('auth:admin');
 Route::get('/', 'admin\auth\LoginController@showLoginForm')->name('admin.login');
+Route::get('/productlist', 'ProductsController@productList')->name('view.productlist');
+Route::post('/productlist/{id}', 'ProductsController@deleteProduct')->name('delete.product');
+Route::get('/addproduct', 'ProductsController@viewAddProduct')->name('view.addProduct');
+Route::post('/addproduct', 'ProductsController@insertProduct')->name('insert.product');
+Route::get('/editproduct/{id}', 'ProductsController@viewProduct')->name('view.editProduct');
+Route::post('/editproduct/{id}', 'ProductsController@updateProduct')->name('update.product');
 Route::post('/', 'admin\auth\LoginController@login');    
+Route::get('/users', 'UsersController@userlists')->name('admin.userlist');    
+Route::post('/delusers/{id}', 'UsersController@delUser')->name('admin.deluser');    
 Route::post('/logout', 'admin\auth\LoginController@logout')->name('admin.logout');
 });
+
