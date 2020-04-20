@@ -71,6 +71,7 @@ Route::get('/getorder', 'OrdersController@getorder')->name('viewOrders')->middle
 Route::get('/', 'admin\auth\LoginController@showLoginForm')->name('admin.login');
 Route::get('/productlist', 'ProductsController@productList')->name('view.productlist');
 Route::post('/productlist/{id}', 'ProductsController@deleteProduct')->name('delete.product');
+Route::post('/invoicelist/{id}', 'ProductsController@deleteInvoice')->name('delete.invoice');
 Route::get('/addproduct', 'ProductsController@viewAddProduct')->name('view.addProduct');
 Route::post('/addproduct', 'ProductsController@insertProduct')->name('insert.product');
 Route::get('/editproduct/{id}', 'ProductsController@viewProduct')->name('view.editProduct');

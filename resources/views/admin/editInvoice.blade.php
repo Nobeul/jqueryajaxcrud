@@ -20,7 +20,7 @@
                                 <div class="col-sm-12">
                                     <form method="post" id="formID" action="{{route('updateOrders')}}" data-parsley-validate="">
                                         {{csrf_field()}}
-                                        
+
                                         @php
                                         $grand_total = 0;
                                         $order_id = 0
@@ -33,6 +33,7 @@
                                                         <th>Quantity</th>
                                                         <th>Price</th>
                                                         <th>Total</th>
+                                                        <th>Tax</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -41,28 +42,43 @@
                                                     @php
                                                     $grand_total = $odr->order->grand_total;
                                                     $order_id = $odr->order_id;
-                                                    
+
                                                     @endphp
                                                     <tr id="tr-{{$odr->product_id}}" data-rel="{{$odr->product_id}}" class="tblcls">
                                                         <input type="hidden" name="id[]" value="{{$odr->id}}">
                                                         <input type="hidden" name="order_id" value="{{$odr->order->id}}">
-                                                        <input type="hidden" name="product_id[]" 
-                                                        value="{{$odr->product_id}}">
+                                                        <input type="hidden" name="product_id[]" value="{{$odr->product_id}}">
 
                                                         <td>{{$odr->product->name}}</td>
 
-                                                        <td><input type="text" style="text-align: center" class="calculate quantity data-parsley-validate positive-float-number" id="qt-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="quantity[]" value="{{$odr->quantity}}"></td>
+                                                        <td>
+                                                            <input type="text" style="text-align: center" class="calculate quantity data-parsley-validate positive-float-number" id="qt-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="quantity[]" value="{{$odr->quantity}}">
+                                                        </td>
 
-                                                        <td><input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="pr-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->product->price}}"></td>
+                                                        <td>
+                                                            <input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="pr-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->product->price}}">
+                                                        </td>
 
                                                         <td>
                                                             <div class="total" id="total-{{$odr->product_id}}">{{$odr->product->price*$odr->quantity}}</div>
                                                         </td>
-                                                        <td><a type="submit" class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                                        <td>
+                                                            <select id="selectTax" class="taxField" style="height:28px">
+                                                                <option value="1" selected hidden>Nothing Selected</option>
+                                                                <option value="2">Tax Exempt(0.00)</option>
+                                                                <option value="3">Sales Tax(15.00)</option>
+                                                                <option value="4">Purchases Tax(15.00)</option>
+                                                                <option value="5">Normal(5.00)</option>
+                                                                <option value="6">Paypal(3.5)(3.50)</option>
+                                                                <option value="7">Paypal(4.5)(4.50)</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <a type="submit" class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                        </td>
                                                     </tr>
                                                     @endforeach
                                                     <input type="hidden" name="grand_total" id="hiddenTotal" value="{{$grand_total}}">
-     
                                                 </tbody>
                                             </table>
                                         </div>
@@ -70,21 +86,37 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-responsive invoice-table invoice-total">
-                                        <tbody>
+                                    <table class="table table-responsive invoice-table invoice-total" style="padding-right: 138px">
+                                        <tbody class="taxInputs">
                                             <tr>
-                                                <th>Sub Total :</th>
-                                                <td>$0</td>
+                                                <th>Other Discounts :</th>
+                                                <td><input type="text" style="margin-left: 8px" class="optionField positive-float-number"></td>
+                                                <td>
+                                                    <select id="selectOption" class="optionField" style="height:28px">
+                                                        <option value="1" class="percent" selected>%</option>
+                                                        <option value="2" class="dollar">$</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <span class="symbol">$</span>
+                                                    <span type="text" readonly="readonly" class="discount">0.00</span>
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <th>Taxes (0%) :</th>
-                                                <td>$0</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Discount (0%) :</th>
-                                                <td>$0</td>
+                                            <tr class="shipment" id="s1">
+                                                <th>shipping :</th>
+                                                <td colspan="2"><input type="text" style="margin-left: 8px; width:220px" class="shipping positive-float-number"></td>
+                                                <td>
+                                                    <span class="symbol">$</span>
+                                                    <span type="text" readonly="readonly" class="shippingAmount">0.00</span>
+                                                </td>
                                             </tr>
                                             <tr class="text-info">
+                                                <td>
+                                                    <hr />
+                                                </td>
+                                                <td>
+                                                    <hr />
+                                                </td>
                                                 <td>
                                                     <hr />
                                                     <h5 class="text-primary m-r-10">Total :</h5>
@@ -139,8 +171,8 @@
         var backend_list = $.inArray(test, backend_list_id);
         console.log(list);
         console.log(backend_list);
-        
-        if(backend_list != -1){
+
+        if (backend_list != -1) {
             var dataRel = parseFloat($('#qt-' + test).val());
             if (isNaN(dataRel)) {
                 $('#qt-' + test).val(1);
@@ -148,8 +180,7 @@
                 dataRel = dataRel + 1;
                 $('#qt-' + test).val(dataRel);
             }
-        }
-        else if ((list == -1)) {
+        } else if ((list == -1)) {
             list_id.push(test);
             $.ajax({
                 url: "{{ route('products.addProduct') }}",
@@ -185,8 +216,7 @@
 
             });
 
-        }
-        else {
+        } else {
 
             var dataRel = parseFloat($('#qt-' + test).val());
             if (isNaN(dataRel)) {
@@ -302,9 +332,162 @@
             var currentVal = parseFloat($(this).text());
             grandTotal += currentVal;
         });
+        var discount = parseFloat($('.discount').text());
+        var shipping = parseFloat($('.shippingAmount').text());
+        grandTotal = grandTotal - discount + shipping;
         grandTotal = grandTotal.toFixed(3);
         $('#grandTotal').text(grandTotal);
         $('#hiddenTotal').val(grandTotal);
     }
+
+    // option fields
+    $(document).on('keyup change', '.optionField', function() {
+        var optionValue = $('#selectOption option:selected').val();
+        var total = 0;
+        var optionfieldValue = $('.optionField').val();
+        if (optionValue == 1) {
+            $('.total').each(function() {
+                var t = parseFloat($(this).text());
+                total += t;
+            });
+
+            if (isNaN(optionfieldValue)) {
+                $('.discount').text('0.00');
+            } else {
+                var discount = (optionfieldValue * total) / 100;
+                $('.discount').text(discount);
+            }
+        } else {
+            if (isNaN(optionfieldValue)) {
+                $('.discount').text('0.00');
+            } else {
+                var optionfieldValue = $('.optionField').val();
+                $('.discount').text(optionfieldValue);
+            }
+        }
+        calculateGrandTotal();
+    });
+
+
+
+
+    $(document).on('keyup', '.shipping', function() {
+        var shipping = parseFloat($(this).val());
+        if (isNaN(shipping)) {
+            $('.shippingAmount').text('0.00');
+        } else {
+            $('.shippingAmount').text(shipping);
+        }
+        calculateGrandTotal();
+    });
+
+    // tax field
+    $(document).on('change', '.taxField', function() {
+        var tax = $('#selectTax option:selected').val();
+        console.log(tax);
+        var trId = $(this).parent().parent().attr('id');
+        if (tax == 2) {
+            var html = ''
+            html += '<tr>'
+            html += '<th>Tax Exempt:</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 0.00%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-2">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = 0.00;
+            $('#tax-2').text(taxAmount);
+        } else if (tax == 3) {
+            var html = ''
+            html += '<tr>'
+            html += '<th>Sales Tax:</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 15.00%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-3">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = (totalAmount * 15) / 100;
+            console.log(taxAmount);
+            $('#tax-3').text(taxAmount);
+            // alert(tax);
+
+        } else if (tax == 4) {
+            var html = ''
+            html += '<tr>'
+            html += '<th>Purchases Tax:</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 15.00%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-4">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = (totalAmount * 15) / 100;
+            console.log(taxAmount);
+            $('#tax-4').text(taxAmount);
+            // alert(tax);
+
+
+        } else if (tax == 5) {
+            var html = ''
+            html += '<tr>'
+            html += '<th>Normal:</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 5.00%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-5">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = (totalAmount * 5) / 100;
+            console.log(taxAmount);
+            $('#tax-5').text(taxAmount);
+            // alert(tax);
+
+        } else if (tax == 6) {
+            var html = ''
+            html += '<tr>'
+            html += '<th>PayPal(3.5):</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 3.50%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-6">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = (totalAmount * 3.5) / 100;
+            console.log(taxAmount);
+            $('#tax-6').text(taxAmount);
+            // alert(tax);
+
+        } else {
+            var html = ''
+            html += '<tr>'
+            html += '<th>PayPal(4.5):</th>'
+            html += '<td colspan="2"><span type="text" readonly="readonly"> 4.50%</span>'
+            html += '<td>'
+            html += '<span class="symbol">$</span>'
+            html += '<span type="text" readonly="readonly" id="tax-7">0.00</span>'
+            html += '<td>'
+            html += '</tr>'
+            $(html).insertAfter(s1);
+            var totalAmount = $(this).parent().parent().find('td').eq(3).text();
+            var taxAmount = (totalAmount * 4.5) / 100;
+            console.log(taxAmount);
+            $('#tax-7').text(taxAmount);
+            // alert(tax);
+
+        }
+
+    });
 </script>
 @endsection

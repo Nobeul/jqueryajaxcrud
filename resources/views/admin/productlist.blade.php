@@ -7,6 +7,7 @@
             <!-- [ Invoice ] start -->
             <div class="container" id="printTable">
                 <div>
+                    @csrf()
                     <div class="card">
                         <div class="card-block">
                             <div class="row">
@@ -23,17 +24,15 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($products as $product)
-                                                <tr>
+                                                <tr id="tr-{{$product->id}}">
                                                     <td>{{$product->name}}</td>
                                                     <td>{{$product->quantity}}</td>
                                                     <td>{{$product->price}}</td>
                                                     <td>
                                                         <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px; margin-left: 30%; display: block; float:left" href="{{route('view.editProduct',$product->id)}}"><i class="fas fa-edit"></i></a>
-                                                        <!-- <form action="{{route('delete.product',$product->id)}}" method="POST">
-                                                            {{csrf_field()}} -->
-                                                            <button type="submit" class="btn btn-success btn-sm delete" style="color:white; margin-bottom: 10px; display:block"><i class="fa fa-trash"></i></button>
-                                                        <!-- </form> -->
-                                                    </td>
+
+                                                        <button type="submit" class="btn btn-success btn-sm delete" id="{{$product->id}}" style="color:white; margin-bottom: 10px; display:block"><i class="fa fa-trash"></i></button>
+                                                    </td> 
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -79,26 +78,29 @@
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
+
+
     //Ajax delete 
-    $(document).on('click', '.delete', function(){
+    $(document).on('click', '.delete', function() {
         var id = $(this).attr('id');
-        if(confirm("Are you sure you want to Delete this data?"))
-        {
+        var trId = $(this).parent().parent().attr('id');
+
+        if (confirm("Are you sure you want to Delete this data?")) {
             $.ajax({
-                url:"{{route('delete.product',$product->id)}}",
-                mehtod:"post",
-                data:{id:id},
-                success:function(data)
-                {
-                    alert(data);
-                    // $('#student_table').DataTable().ajax.reload();
+                type: "post",
+                url: "/admin/productlist/" + id,
+                data: {
+                    "id": id,
+                    "_token": "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    $("#"+trId).hide();
+                    $("#"+trId).remove();
                 }
             })
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }); 
+    });
 </script>
 @endsection

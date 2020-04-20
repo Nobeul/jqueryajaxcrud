@@ -29,12 +29,13 @@
                                 <div class="col-sm-12">
                                     <div class="table-responsive">
                                         <table class="table  invoice-detail-table  align_center" id="myTable">
+                                            @csrf()
                                             <thead>
                                                 <tr class="thead-default">
                                                     <th>Order Number</th>
                                                     <th>Total Quantity</th>
                                                     <th>Total Amount</th>
-                                                    <th>Action</th>
+                                                    <th>Action</th> 
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -44,7 +45,9 @@
                                                     <td>{{$odr->qty}}</td>
                                                     <td>{{$odr->grand_total}}</td>
                                                     <td>
-                                                        <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px" href="{{route('editOrders', $odr->id)}}"><i class="fas fa-edit"></i></a>
+                                                        <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px; display: block; float:left" href="{{route('editOrders', $odr->id)}}"><i class="fas fa-edit"></i></a>
+
+                                                        <!-- <button type="submit" class="btn btn-success btn-sm delete" id="{{$odr->id}}" style="color:white; margin-bottom: 10px; display:block"><i class="fa fa-trash"></i></button> -->
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -92,6 +95,8 @@
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
+
+   
    
 </script>
 

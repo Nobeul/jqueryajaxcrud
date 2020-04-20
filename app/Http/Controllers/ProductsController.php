@@ -97,6 +97,13 @@ class ProductsController extends Controller
         return back();
     }
 
+    public function deleteInvoice(Request $request){
+        $order = Order::with('order_details')->find($request->id);
+        dd($order);
+        $order->delete();
+        return ['success' => true, 'message' => 'Data Deleted'];
+    }
+
     public function updateOrder(Request $request)
     {
         $order = Order::find($request->id);
@@ -147,7 +154,7 @@ class ProductsController extends Controller
     public function deleteProduct(Request $request){
         $product = Product::find($request->id);
         $product->delete();
-        return back();
+        return ['success' => true, 'message' => 'Data Deleted'];
     }
 
     public function insertProduct(Request $request){
