@@ -35,7 +35,7 @@
                                                     <th>Order Number</th>
                                                     <th>Total Quantity</th>
                                                     <th>Total Amount</th>
-                                                    <th>Action</th> 
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -95,9 +95,6 @@
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
-
-   
-   
 </script>
 
 @endsection

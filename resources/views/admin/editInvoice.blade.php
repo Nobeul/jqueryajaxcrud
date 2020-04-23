@@ -204,6 +204,16 @@
                     html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number quantity errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "qt-' + product.id + '"  name="qty[]" value = "1"/>'
                     html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number price errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "pr-' + product.id + '"  name="prc[]"  value = "' + product.price + '"/>'
                     html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.price + '</div></td>'
+                    html += '<td><select id = "selectTax" class = "taxField" style = "height:28px">'
+                    html += '<option value = "1" selected hidden > Nothing Selected </option>'
+                    html += '<option value = "1" selected hidden > Nothing Selected </option>'
+                    html += '<option value = "2" > Tax Exempt(0.00) </option>'
+                    html += '<option value = "3" > Sales Tax(15.00) </option>'
+                    html += '<option value = "4" > Purchases Tax(15.00) </option>'
+                    html += '<option value = "5" > Normal(5.00) </option>'
+                    html += '<option value = "6" > Paypal(3.5)(3.50) </option>'
+                    html += '<option value = "7" > Paypal(4.5)(4.50) </option>'
+                    html += '</select></td>'
                     html += '<td><span class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></span></td>'
                     html += '</tr>';
                     $('.addProduct').append(html);
