@@ -23,6 +23,25 @@
             <div class="container" id="printTable">
                 <div>
                     <div class="card">
+                        <div class="form-group" style="margin: 20px 0px 0px 20px; width: 400px">
+                            <table>
+                                <tr>
+                                    <!-- <tr style="float:right"> -->
+                                    <td>
+                                        <!-- <span class="">Add User</span> -->
+                                        <select name="user" id="user" class="form-control input-lg dynamic" data-dependent="state" style=" height: 2.3rem! important; width: 250px">
+                                            <option value="">Select User</option>
+                                            @foreach($order as $odr)
+                                            <option value="">{{$odr->user->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="filterUser" class="btn btn-primary" style="margin: 2px 10px; height: 35px">Filter</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
                         <div class="card-block">
                             <div class="row">
@@ -32,6 +51,7 @@
                                             @csrf()
                                             <thead>
                                                 <tr class="thead-default">
+                                                    <th>User</th>
                                                     <th>Order Number</th>
                                                     <th>Total Quantity</th>
                                                     <th>Total Amount</th>
@@ -41,6 +61,7 @@
                                             <tbody>
                                                 @foreach($order as $odr)
                                                 <tr>
+                                                    <td>{{$odr->user->name}}</td>
                                                     <td>{{$odr->order_number}}</td>
                                                     <td>{{$odr->qty}}</td>
                                                     <td>{{$odr->grand_total}}</td>

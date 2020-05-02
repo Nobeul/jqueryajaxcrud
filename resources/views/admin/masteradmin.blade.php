@@ -53,15 +53,23 @@
                     <li data-username="Invoice Summury List" class="nav-item pcoded-hasmenu active pcoded-trigger">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Invoice</span></a>
                         <ul class="pcoded-submenu">
-                        <li class="active"><a href="{{route('viewOrders')}}" class="">Invoice list</a></li>
-                        <li class="active"><a href="{{route('admin.userlist')}}" class="">User list</a></li>
+                            <li class="active"><a href="{{route('viewOrders')}}" class="">Invoice list</a></li>
+                            <li><a href="{{route('admin.userlist')}}" class="">User list</a></li>
+                            <li><a href="{{route('admin.addInvoice')}}" class="">Add Invoice</a></li>
                         </ul>
                     </li>
                     <li data-username="Invoice Summury List" class="nav-item pcoded-hasmenu active pcoded-trigger">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Products</span></a>
                         <ul class="pcoded-submenu">
-                        <li class="active"><a href="{{route('view.productlist')}}" class="">Product list</a></li>
-                        <li class="active"><a href="{{route('view.addProduct')}}" class="">Add Product</a></li>
+                            <li><a href="{{route('view.productlist')}}" class="">Product list</a></li>
+                            <li><a href="{{route('view.addProduct')}}" class="">Add Product</a></li>
+                        </ul>
+                    </li>
+                    <li data-username="Invoice Summury List" class="nav-item pcoded-hasmenu active pcoded-trigger">
+                        <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Settings</span></a>
+                        <ul class="pcoded-submenu">
+                            <li><a href="{{route('settings.viewLocation')}}" class="">Company Details</a></li>
+                            
                         </ul>
                     </li>
                 </ul>

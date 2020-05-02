@@ -76,9 +76,20 @@ Route::get('/addproduct', 'ProductsController@viewAddProduct')->name('view.addPr
 Route::post('/addproduct', 'ProductsController@insertProduct')->name('insert.product');
 Route::get('/editproduct/{id}', 'ProductsController@viewProduct')->name('view.editProduct');
 Route::post('/editproduct/{id}', 'ProductsController@updateProduct')->name('update.product');
-Route::post('/', 'admin\auth\LoginController@login');    
+Route::post('/', 'admin\auth\LoginController@login');
 Route::get('/users', 'UsersController@userlists')->name('admin.userlist');    
 Route::post('/delusers/{id}', 'UsersController@delUser')->name('admin.deluser');    
 Route::post('/logout', 'admin\auth\LoginController@logout')->name('admin.logout');
+// Invoice routes
+Route::get('/addinvoice', 'InvoicesController@viewAddInvoice')->name('admin.addInvoice');
+Route::post('/addinvoice', 'InvoicesController@orderStore')->name('admin.postAddInvoice');
+Route::post('/addinvoice/fetch', 'InvoicesController@fetch')->name('addInvoice.fetch');
+// Locations routes
+Route::get('/location', 'locationsController@index')->name('settings.viewLocation');
+Route::get('/newlocation', 'locationsController@viewNewLocation')->name('settings.addNewLocation');
+Route::post('/newlocation', 'locationsController@createLocation')->name('settings.createLocation');
+Route::get('/editLocation/{id}', 'locationsController@openEditLocationPage')->name('editLocation');
+Route::post('/editLocation/{id}', 'locationsController@updateLocation')->name('post.editLocation');
+Route::post('/deletelocation/{id}', 'locationsController@deleteLocation')->name('deleteLocation');
 });
 

@@ -89,7 +89,8 @@
                     $('.quantity').each(function() {
                         var quantityid = $(this).attr('data-rel');
                         quantity_id.push(quantityid);
-                        // console.log(quantity_id);
+                        calculateGrandTotal();
+
                     });
                 }
 
@@ -225,7 +226,6 @@
         // grandTotal = grandTotal.toFixed(3);
         $('#grandTotal').text(grandTotal);
     }
-
 </script>
 
 @endsection

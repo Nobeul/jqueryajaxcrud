@@ -100,11 +100,6 @@ class OrdersController extends Controller
         Order::where('id', $order_id)->update(['grand_total' => $grand_total]);
         return back();
     }
-    // public function order_delete(Request $request)
-    // {
-    //     dd($request->all());
-    //     return back();
-    // }
 
     public function fetch(Request $request)
     {
@@ -160,14 +155,26 @@ class OrdersController extends Controller
             $join->on('order_details.order_id', '=', 'orders.id');
         })
             ->select([
-                'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total',
+                'orders.id', 'order_details.order_id', 'orders.order_number', 'orders.grand_total', 'user_id',
                 DB::raw('sum(order_details.quantity) as qty')
 
             ])
-            ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'orders.grand_total')
+            ->groupBy('order_details.order_id', 'orders.id',  'orders.order_number', 'user_id', 'orders.grand_total')
             ->orderBy('orders.order_number', 'desc')
             ->get();
+        // dd($order);
         return view('admin.invoice')->with('order', $order);
+    }
+
+    function filter_data(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $data = DB::table('order')
+                ->whereBetween('user_id', array($request->user_id))
+                ->get();
+            echo json_encode($data);
+        }
     }
 
     function fetchProducts(Request $request)

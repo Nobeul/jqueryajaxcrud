@@ -18,6 +18,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->float('grand_total');
+            $table->string('type')->default('product');
+            $table->date('date');
             $table->string('order_number');
             $table->timestamps();
         });

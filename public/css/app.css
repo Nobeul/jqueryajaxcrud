@@ -8841,3 +8841,11 @@ label.error {
 .align_center {
     text-align: center;
 }
+
+.input-width{
+    width: 170%;
+}
+
+.a{
+    margin-top: 6px;
+}
