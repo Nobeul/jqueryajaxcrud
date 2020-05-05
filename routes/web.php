@@ -66,30 +66,43 @@ Route::post('/productlist/fetch', 'OrdersController@fetchProducts')->name('produ
 
 
 // Admin Routes
-Route::prefix('admin')->group(function(){
-Route::get('/getorder', 'OrdersController@getorder')->name('viewOrders')->middleware('auth:admin');
-Route::get('/', 'admin\auth\LoginController@showLoginForm')->name('admin.login');
-Route::get('/productlist', 'ProductsController@productList')->name('view.productlist');
-Route::post('/productlist/{id}', 'ProductsController@deleteProduct')->name('delete.product');
-Route::post('/invoicelist/{id}', 'ProductsController@deleteInvoice')->name('delete.invoice');
-Route::get('/addproduct', 'ProductsController@viewAddProduct')->name('view.addProduct');
-Route::post('/addproduct', 'ProductsController@insertProduct')->name('insert.product');
-Route::get('/editproduct/{id}', 'ProductsController@viewProduct')->name('view.editProduct');
-Route::post('/editproduct/{id}', 'ProductsController@updateProduct')->name('update.product');
-Route::post('/', 'admin\auth\LoginController@login');
-Route::get('/users', 'UsersController@userlists')->name('admin.userlist');    
-Route::post('/delusers/{id}', 'UsersController@delUser')->name('admin.deluser');    
-Route::post('/logout', 'admin\auth\LoginController@logout')->name('admin.logout');
-// Invoice routes
-Route::get('/addinvoice', 'InvoicesController@viewAddInvoice')->name('admin.addInvoice');
-Route::post('/addinvoice', 'InvoicesController@orderStore')->name('admin.postAddInvoice');
-Route::post('/addinvoice/fetch', 'InvoicesController@fetch')->name('addInvoice.fetch');
-// Locations routes
-Route::get('/location', 'locationsController@index')->name('settings.viewLocation');
-Route::get('/newlocation', 'locationsController@viewNewLocation')->name('settings.addNewLocation');
-Route::post('/newlocation', 'locationsController@createLocation')->name('settings.createLocation');
-Route::get('/editLocation/{id}', 'locationsController@openEditLocationPage')->name('editLocation');
-Route::post('/editLocation/{id}', 'locationsController@updateLocation')->name('post.editLocation');
-Route::post('/deletelocation/{id}', 'locationsController@deleteLocation')->name('deleteLocation');
+Route::prefix('admin')->group(function () {
+    Route::get('/getorder', 'OrdersController@getorder')->name('viewOrders')->middleware('auth:admin');
+    Route::get('/', 'admin\auth\LoginController@showLoginForm')->name('admin.login');
+    Route::get('/productlist', 'ProductsController@productList')->name('view.productlist');
+    Route::post('/productlist/{id}', 'ProductsController@deleteProduct')->name('delete.product');
+    Route::post('/invoicelist/{id}', 'ProductsController@deleteInvoice')->name('delete.invoice');
+    Route::get('/addproduct', 'ProductsController@viewAddProduct')->name('view.addProduct');
+    Route::post('/addproduct', 'ProductsController@insertProduct')->name('insert.product');
+    Route::get('/editproduct/{id}', 'ProductsController@viewProduct')->name('view.editProduct');
+    Route::post('/editproduct/{id}', 'ProductsController@updateProduct')->name('update.product');
+    Route::post('/', 'admin\auth\LoginController@login');
+    Route::get('/users', 'UsersController@userlists')->name('admin.userlist');
+    Route::post('/delusers/{id}', 'UsersController@delUser')->name('admin.deluser');
+    Route::post('/logout', 'admin\auth\LoginController@logout')->name('admin.logout');
+    // Invoice routes
+    Route::get('/addinvoice', 'InvoicesController@viewAddInvoice')->name('admin.addInvoice');
+    Route::post('/addinvoice', 'InvoicesController@orderStore')->name('admin.postAddInvoice');
+    Route::post('/addinvoice/fetch', 'InvoicesController@fetch')->name('addInvoice.fetch');
+    // Locations routes
+    Route::prefix('location')->group(function () {
+        Route::get('/', 'locationsController@index')->name('settings.viewLocation');
+        Route::get('/newlocation', 'locationsController@viewNewLocation')->name('settings.addNewLocation');
+        Route::post('/newlocation', 'locationsController@createLocation')->name('settings.createLocation');
+        Route::get('/editLocation/{id}', 'locationsController@openEditLocationPage')->name('editLocation');
+        Route::post('/editLocation/{id}', 'locationsController@updateLocation')->name('post.editLocation');
+        Route::post('/deletelocation/{id}', 'locationsController@deleteLocation')->name('deleteLocation');
+    });
+    // company settings routes
+    Route::prefix('company')->group(function () {
+        Route::get('/', 'CompanyController@index')->name('company.viewSettings');
+        Route::post('/', 'CompanyController@saveSettings')->name('company.saveSettings');
+        
+    });
+    // user role settings routes
+    Route::prefix('userrole')->group(function () {
+        Route::get('/addUserRole', 'UserRoleController@addNewUserRole')->name('addUserRole');
+        // Route::post('/', 'CompanyController@saveSettings')->name('company.saveSettings');
+        
+    });
 });
-

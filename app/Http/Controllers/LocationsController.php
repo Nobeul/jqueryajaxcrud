@@ -32,7 +32,6 @@ class LocationsController extends Controller
 
     public function openEditLocationPage(Request $request){
         $locations = Location::where('id', $request->id)->get();
-        // dd($location);
         return view('location.editLocation')->with('locations', $locations);
     }
 

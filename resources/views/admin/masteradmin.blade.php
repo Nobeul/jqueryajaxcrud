@@ -68,7 +68,7 @@
                     <li data-username="Invoice Summury List" class="nav-item pcoded-hasmenu active pcoded-trigger">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Settings</span></a>
                         <ul class="pcoded-submenu">
-                            <li><a href="{{route('settings.viewLocation')}}" class="">Company Details</a></li>
+                            <li><a href="{{route('company.viewSettings')}}" class="">Company Details</a></li>
                             
                         </ul>
                     </li>
