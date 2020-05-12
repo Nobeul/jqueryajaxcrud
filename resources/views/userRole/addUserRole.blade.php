@@ -5,7 +5,7 @@
         <div class="col-md-3 col-sm-12">
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <li><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('company.viewSettings')}}">Company Settings</a></li>
-                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="#v-pills-profile">Department</a></li>
+                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="{{route('department.viewlist')}}">Department</a></li>
                 <li @php if(request()->path() == 'admin/userrole/addUserRole')
                     {
                     echo 'class="active"';

@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
-    public function index() 
+    public function index()
     {
 
-        return view('products.productlist'); 
+        return view('products.productlist');
     }
 
     function fetch(Request $request)
@@ -27,14 +27,13 @@ class ProductsController extends Controller
             // dd($data);
             $gg = $data->toArray();
             // dd($gg);
-            if (count($gg)>0) {
+            if (count($gg) > 0) {
 
                 foreach ($data as $row) {
 
-
                     $output .= '<li onclick="addingProduct(this)" class="listItems" id= ' . $row->id . '>' . $row->name . '</li>';
                 }
-            }else{
+            } else {
                 $output .= '<li onclick="addingProduct(this)" class="listItems">Nothing Found</li>';
             }
         }
@@ -50,19 +49,25 @@ class ProductsController extends Controller
 
     public function orderStore(Request $request)
     {
+        // dd($request->all());
         $userId = Auth::id();
         $insert_data = [];
         $product_id = $request->id;
-        // dd($product_id);
         $quantity = $request->quantity;
         $price = $request->price;
+        $date = date("d-m-y");
         // order number starts here
-        $order_number = Order::orderBy('id', 'desc')->first('order_number');
-
-        $order_number = substr($order_number->order_number, 6);
-        $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
-        $order_number = 'order-' . $order_number;
+        $order_number = Order::orderBy('id', 'desc')->count('orders.order_number');
+        if ($order_number == 0) {
+            $order_number = 'order-0001';
+        } else {
+            $order_number = Order::orderBy('id', 'desc')->first();
+            $order_number = substr($order_number->order_number, 6);
+            $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
+            $order_number = 'order-' . $order_number;
+        }
         // order number ends here
+
         for ($count = 0; $count < count($product_id); $count++) {
 
             $data = array(
@@ -74,7 +79,8 @@ class ProductsController extends Controller
         $order = array(
             'user_id' => $userId,
             'grand_total' => $grand_total,
-            'order_number' => $order_number
+            'order_number' => $order_number,
+            'date' => $date
         );
         // dd($order);
         Order::insert($order);
@@ -86,7 +92,7 @@ class ProductsController extends Controller
                 'product_id'  => $product_id[$count],
                 'quantity'  => $quantity[$count],
                 'price'  => $price[$count],
-                'order_id' => $search_order,
+                'order_id' => $search_order
             );
             // dd($data);
             $data['price'] = $data['quantity'] * $data['price'];
@@ -97,9 +103,10 @@ class ProductsController extends Controller
         return back();
     }
 
-    public function deleteInvoice(Request $request){
+    public function deleteInvoice(Request $request)
+    {
         $order = Order::with('order_details')->find($request->id);
-        dd($order);
+        // dd($order);
         $order->delete();
         return ['success' => true, 'message' => 'Data Deleted'];
     }
@@ -123,7 +130,8 @@ class ProductsController extends Controller
         return $product;
     }
 
-    public function orderList(){
+    public function orderList()
+    {
         $userId = Auth::id();
         $order = Order::join('order_details', function ($join) {
             $join->on('order_details.order_id', '=', 'orders.id');
@@ -146,18 +154,21 @@ class ProductsController extends Controller
         $order = OrderDetails::with('product', 'order')->where('order_id', $order_id)->get();
         return view('order.editOrder')->with('order', $order);
     }
-    public function productList(){
+    public function productList()
+    {
         $products = Product::get();
-        return view('admin.productlist')->with('products',$products);
+        return view('admin.productlist')->with('products', $products);
     }
 
-    public function deleteProduct(Request $request){
+    public function deleteProduct(Request $request)
+    {
         $product = Product::find($request->id);
         $product->delete();
         return ['success' => true, 'message' => 'Data Deleted'];
     }
 
-    public function insertProduct(Request $request){
+    public function insertProduct(Request $request)
+    {
         $product = new Product;
         $product->name = $request->name;
         $product->quantity = $request->quantity;
@@ -166,10 +177,12 @@ class ProductsController extends Controller
         $product->save();
         return redirect('admin/productlist');
     }
-    public function viewAddProduct(){
+    public function viewAddProduct()
+    {
         return view('admin.addproduct');
     }
-    public function updateProduct(Request $request){
+    public function updateProduct(Request $request)
+    {
         $product = Product::find($request->id);
         $product->name = $request->name;
         $product->quantity = $request->quantity;
@@ -179,10 +192,10 @@ class ProductsController extends Controller
         return redirect('admin/productlist');
     }
 
-    public function viewProduct(Request $request){
+    public function viewProduct(Request $request)
+    {
         $product = Product::find($request->id);
         // dd($product);   
         return view('admin.editproduct')->with('product', $product);
     }
-    
 }

@@ -12,7 +12,8 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $data['companies'] = Company::with('country', 'language', 'currency')->get();
+        $data['companies'] = Company::with('country', 'language', 'currency')->get()->first();
+        // dd($data);
         $data['countries'] = Country::all();
         $data['currencies'] = Currency::all();
         $data['languages'] = Language::all();

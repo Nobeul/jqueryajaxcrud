@@ -1,38 +1,53 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\User;
 use App\Order;
 use App\Product;
 use App\OrderDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\PaymentTerm;
+use App\Location;
 
 class InvoicesController extends Controller
 {
     public function viewAddInvoice()
     {
-        $users = User::all();
-        return view('admin.addInvoice')->with('users',$users);
+        $data['users'] = User::all();
+        $data['payment_terms'] = PaymentTerm::all();
+        $data['locations'] = Location::all();
+        $data['order'] = Order::orderby('id', 'desc')->count();
+        if ($data['order'] == 0) {
+            $data['order'] = 1;
+        } else {
+            $data['order'] = Order::orderby('id', 'desc')->first();
+            $data['order'] = $data['order']->order_number;
+        }
+        return view('admin.addInvoice', $data);
     }
 
-    
+
     public function orderStore(Request $request)
     {
-        // dd($request->all());
         $userId = $request->user;
         $insert_data = [];
         $product_id = $request->id;
-        // dd($product_id);
         $quantity = $request->quantity;
         $price = $request->price;
         // order number starts here
-        $order_number = Order::orderBy('id', 'desc')->first('order_number');
-
-        $order_number = substr($order_number->order_number, 6);
-        $order_number = str_pad(++$order_number, 4, "0", STR_PAD_LEFT);
-        $order_number = 'order-' . $order_number;
-
+        $date;
+        $order_number = Order::orderBy('id', 'desc')->count('orders.order_number');
+        // dd($order_number);
+        if ($order_number == 0) {
+            $order_number = 'order-0001';
+            $date = date("d-m-y");
+        } else {
+            $order_number = Order::orderBy('id', 'desc')->first();
+            $order_number = 'order-' . $request->order_number;
+            $date = $request->date;
+        }
         $grand_total = 0;
         // order number ends here
         for ($count = 0; $count < count($product_id); $count++) {
@@ -47,9 +62,9 @@ class InvoicesController extends Controller
         $order = array(
             'user_id' => $userId,
             'grand_total' => $grand_total,
-            'order_number' => $order_number
+            'order_number' => $order_number,
+            'date' => $date
         );
-        // dd($order);
         Order::insert($order);
 
         $search_order = Order::where('order_number', $order_number)->value('id');
@@ -59,7 +74,7 @@ class InvoicesController extends Controller
                 'product_id'  => $product_id[$count],
                 'quantity'  => $quantity[$count],
                 'price'  => $price[$count],
-                'order_id' => $search_order,
+                'order_id' => $search_order
             );
             // dd($data);
             $data['price'] = $data['quantity'] * $data['price'];
@@ -67,7 +82,7 @@ class InvoicesController extends Controller
         }
         // dd($insert_data);
         OrderDetails::insert($insert_data);
-        return back();
+        return redirect('admin/getorder');
     }
     function fetch(Request $request)
     {

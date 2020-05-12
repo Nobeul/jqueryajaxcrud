@@ -1,102 +1,124 @@
 @extends('admin.masteradmin')
 
 @section('content')
-<form method="post" id="formID" action="{{route('admin.postAddInvoice')}}" data-parsley-validate="">
-    {{csrf_field()}}
-
+<form method="post" action="{{route('admin.postAddInvoice')}}">
+    @csrf
     <!-- New Invoice starts here -->
     <div class="card">
         <div class="card-header">
             <h5>New Invoice</h5>
         </div>
         <div class="card-block">
-            <form>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Customer</label>
-                                <span class="text-danger">*</span>
-                            </div>
-                            <div class="col-sm-8">
-                                <select id="inputState" class="form-control">
-                                    <option selected="">select</option>
-                                    <option>Large select</option>
-                                </select>
-                            </div>
-                            <span class="feather icon-user-plus" style="margin-top: 2%; color: blueviolet;"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Customer</label>
+                            <span class="text-danger">*</span>
                         </div>
+                        <div class="col-sm-8">
+                            <select id="user" name="user" class="form-control">
+                                <option value="">Select</option>
+                                @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
+                            <label id="user-error" class="error" for="user"></label>
+
+                        </div>
+                        <span class="feather icon-user-plus" style="margin-top: 2%; color: blueviolet;" onclick="openCustomerModal()"></span>
                     </div>
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Reference</label>
-                                <span class="text-danger">*</span>
+                </div>
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Reference</label>
+                            <span class="text-danger">*</span>
+                        </div>
+                        <div class="input-group date col-md-8 p-md-0">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="margin-left: 20%">order-</span>
                             </div>
-                            <div class="input-group date col-md-8 p-md-0">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" style="margin-left: 20%">order-</span>
-                                </div>
-                                <input id="reference_no" class="form-control" value="" type="text" style="margin-left: 2%">
-                            </div>
+                            <input id="reference_no" class="form-control" name="order_number" value="
+                            @php 
+                            if($order == 1)
+                            {
+                                echo '0001';
+                            }else{
+                                
+                            $pre_order_number = trim($order, 'order-');
+                            $post_order_number = str_pad(++$pre_order_number, 4, "0", STR_PAD_LEFT); 
+                            echo str_replace(' ', '', $post_order_number); 
+                            
+                        } 
+                            @endphp 
+                            " type=" text" style="margin-left: 2%">
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Location</label>
-                            </div>
-                            <div class="col-sm-9">
-                                <select id="inputState" class="form-control">
-                                    <option selected="">select</option>
-                                    <option>Large select</option>
-                                </select>
-                            </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Location</label>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Date</label>
-                                <span class="text-danger">*</span>
-                            </div>
-                            <div class="col-sm-9">
-                                <input type="date" name="date" class="form-control">
-                            </div>
+                        <div class="col-sm-9">
+                            <select id="inputState" class="form-control">
+                                <option selected="">Select</option>
+                                @foreach($locations as $location)
+                                <option value="{{$location->id}}">{{$location->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Payment Term</label>
-                            </div>
-                            <div class="col-sm-9">
-                                <select id="inputState" class="form-control">
-                                    <option selected="">select</option>
-                                    <option>Large select</option>
-                                </select>
-                            </div>
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Date</label>
+                            <span class="text-danger">*</span>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row form-group">
-                            <div class="col-sm-3">
-                                <label class="col-form-label">Invoice Type</label>
-                            </div>
-                            <div class="col-sm-9">
-                                <select id="inputState" class="form-control">
-                                    <option selected="">select</option>
-                                    <option>Large select</option>
-                                </select>
-                            </div>
+                        <div class="col-sm-9">
+                            <input type="date" id="date" name="date" class="form-control">
+                            <label id="date-error" class="error" for="date"></label>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Payment Term</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <select id="inputState" name="term_name" class="form-control">
+                                <option selected="">Select</option>
+                                @foreach($payment_terms as $pay)
+                                <option value="{{$pay->id}}">{{$pay->term_name}}</option>
+                                @endforeach
+                            </select>
+                            <label id="pay-error" class="error" for="pay"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row form-group">
+                        <div class="col-sm-3">
+                            <label class="col-form-label">Invoice Type</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <select id="inputState" name="type" class="form-control">
+                                <option selected="">Select</option>
+                                <option value="1">Product</option>
+                                <option value="2">Service</option>
+                            </select>
+                            <label id="type-error" class="error" for="type"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- New Invoice ends here -->
@@ -105,7 +127,6 @@
         <div class="card-header">
             <h4>Add Product</h5>
         </div>
-
         <div class="container">
             <div class="product">
             </div>
@@ -119,18 +140,7 @@
 
                     <div id="countryList">
                     </div>
-
-                </td>
-                <td>
-                    <div class="form-group" style="margin-left: 20px;">
-                        <span class="">Add User</span>
-                        <select name="user" id="user" class="form-control input-lg dynamic" data-dependent="state" style=" height: 2.3rem! important">
-                            <option value="">Select User</option>
-                            @foreach($users as $user)
-                            <option value="{{ $user->id}}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <label id="list-error" class="error" for="list"></label>
                 </td>
             </table>
 
@@ -157,19 +167,86 @@
                         </tr>
                     </table>
                 </div>
-                <button type="submit" id="order" class="btn btn-primary submitBtn">Order Now</button>
+                <input type="submit" id="orderSubmit" class="btn btn-primary submitBtn" value="Order Now">
             </div>
         </div>
 </form>
+<!-- Modal to add new customer-->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 128%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="modalForm" method="POST" action="{{route('admin.addUser')}}" data-parsley-validate="">
+                @csrf()
+                <div class="modal-body">
+                    <div class="form-group row p-t-10">
+                        <label class="col-sm-3 control-label a" for="inputEmail3">
+                            Name
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control input-length" required id="name" name="name" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="form-group row p-t-10">
+                        <label class="col-sm-3 control-label a" for="inputEmail3">
+                            E-Mail Address
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="email" class="form-control input-length" required id="email" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group row p-t-10">
+                        <label class="col-sm-3 control-label a" for="inputEmail3">
+                            Password
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control input-length" required id="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group row p-t-10">
+                        <label class="col-sm-3 control-label a" for="inputEmail3">
+                            Confirm Password
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control input-length" required id="confirm_password" name="confirm_password" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-right:3%">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btnSave">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.js"></script>
 <script>
-    $('.autonumber').autoNumeric('init');
-
     var quantity_id = [];
-    $('#formID').parsley();
+    $('#formUniqueID').parsley();
+    $('#modalForm').parsley();
+    $("#orderSubmit").on('click', function(event) {
+        if ($("#user").val() == "") {
+            $('#user-error').text('This field is required');
+            event.preventDefault();
+        }
+        if ($("#date").val() == "") {
+            $('#date-error').text('This field is required');
+            event.preventDefault();
+        }
+    });
 
 
     var list_id = [];
@@ -291,11 +368,6 @@
         $(document).on('keyup', '.calculate', function() {
             calculateTotal();
             calculateGrandTotal();
-            // $('input[type=text]').each(function() {
-            //     if ($(this).val() == '') {
-            //         alert('Can not be null');
-            //     }
-            // });
         });
     });
 
@@ -345,6 +417,19 @@
         // grandTotal = grandTotal.toFixed(3);
         $('#grandTotal').text(grandTotal);
     }
+
+    function openCustomerModal() {
+        $('.modal-title').text('Add New Customer');
+        $('#modal').modal();
+    }
+    $('#orderSubmit').on('click', function(event) {
+        var childNode = $('#countryList').children().length;
+        if (childNode == 0) {
+            $('#list-error').text('No Item added! Please add some item...');
+            event.preventDefault();
+        }
+
+    });
 </script>
 
 @endsection

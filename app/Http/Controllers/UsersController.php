@@ -6,6 +6,7 @@ use App\User;
 use App\Order;
 use App\OrderDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -14,6 +15,16 @@ class UsersController extends Controller
     {
         $users = User::get();
         return view('admin.user')->with('users', $users);
+    }
+
+    public function addUser(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return back();
     }
 
     public function delUser(Request $request)

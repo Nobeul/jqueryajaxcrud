@@ -78,6 +78,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/editproduct/{id}', 'ProductsController@updateProduct')->name('update.product');
     Route::post('/', 'admin\auth\LoginController@login');
     Route::get('/users', 'UsersController@userlists')->name('admin.userlist');
+    Route::post('/adduser', 'UsersController@addUser')->name('admin.addUser');
     Route::post('/delusers/{id}', 'UsersController@delUser')->name('admin.deluser');
     Route::post('/logout', 'admin\auth\LoginController@logout')->name('admin.logout');
     // Invoice routes
@@ -97,12 +98,28 @@ Route::prefix('admin')->group(function () {
     Route::prefix('company')->group(function () {
         Route::get('/', 'CompanyController@index')->name('company.viewSettings');
         Route::post('/', 'CompanyController@saveSettings')->name('company.saveSettings');
-        
     });
     // user role settings routes
     Route::prefix('userrole')->group(function () {
         Route::get('/addUserRole', 'UserRoleController@addNewUserRole')->name('addUserRole');
         // Route::post('/', 'CompanyController@saveSettings')->name('company.saveSettings');
-        
+
+    });
+    // departments routes
+    Route::prefix('department')->group(function () {
+        Route::get('/', 'DepartmentsController@index')->name('department.viewlist');
+        Route::post('/newdepartment', 'DepartmentsController@addNewDepartment')->name('department.addNew');
+        Route::get('/editdepartment/{id}', 'DepartmentsController@editDepartment')->name('department.edit');
+        Route::post('/editdepartment', 'DepartmentsController@updateDepartment')->name('department.update');
+        Route::post('/deletedepartment/{id}', 'DepartmentsController@deleteDepartment')->name('department.delete');
+    });
+    // departments routes
+    Route::prefix('finance')->group(function () {
+        Route::get('/paymentterms', 'PaymentTermsController@index')->name('PaymentTerms.viewlist');
+        Route::post('/newpayment', 'PaymentTermsController@savePaymentTerm')->name('paymentTerm.addNew');
+        Route::get('/editpayment/{id}', 'PaymentTermsController@editPayment')->name('payment.edit');
+        Route::post('/updatepayment', 'PaymentTermsController@updatePayment')->name('payment.update');
+        Route::post('/deletepayment/{id}', 'PaymentTermsController@deletePaymentTerm')->name('deletePaymentTerm.delete');
+
     });
 });

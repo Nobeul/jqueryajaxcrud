@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->float('grand_total');
             $table->string('type')->default('product');
             $table->date('date');
+            $table->string('location')->nullable();
             $table->string('order_number');
             $table->timestamps();
         });

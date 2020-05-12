@@ -4,31 +4,28 @@
     <div class="row">
         <div class="col-md-3 col-sm-12">
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <li @php if(request()->path() == 'admin/company')
-                    {
-                    echo 'class="active"';
-                    echo ' style="background-color:#3490dc;';
-                    echo 'border-radius: 0.25rem;"';
-                    }
-                    @endphp><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('company.viewSettings')}}" style="@php if(' class==" active"') echo ' color:#fff' ;@endphp">Company Settings</a></li>
-                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="#v-pills-profile">Department</a></li>
+                <li {{(request()->path() == 'admin/location') ? 'class="active"' : null}} @php if('class=="active"'){
+                echo ' style="background-color:#3490dc;';
+                echo 'border-radius: 0.25rem;"';
+                }
+            @endphp><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('company.viewSettings')}}" style="@php if(' class=="active"') echo ' color:#fff';@endphp">Company Settings</a></li>
+                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="{{route('department.viewlist')}}">Department</a></li>
                 <li><a class="nav-link text-left" id="v-pills-messages-tab aa" href="{{route('addUserRole')}}">User Roles</a></li>
                 <li><a class="nav-link text-left" id="v-pills-settings-tab bb" href="{{route('settings.viewLocation')}}" style="">Locations</a></li>
             </ul>
         </div>
         <div class="col-md-9 col-sm-12">
             <div class="tab-content" id="v-pills-tabContent">
-                @foreach($companies as $company)
                 <form id="formID" method="POST" action="{{route('company.saveSettings')}}" data-parsley-validate="" enctype="multipart/form-data">
                     @csrf()
-                    <input type="hidden" name="id" value="{{$company->id}}">
+                    <input type="hidden" name="id" value="{{$companies->id}}">
                     <div class="form-group row p-t-10">
                         <label class="col-sm-3 control-label a" for="inputEmail3">
                             Name
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="name" name="name" value="{{$company->name}}">
+                            <input type="text" class="form-control" id="name" name="name" value="{{$companies->name}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -36,7 +33,7 @@
                             Site Short Name
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" readonly="readonly" class="form-control" id="site_short_name" name="site_short_name" value="{{$company->site_short_name}}">
+                            <input type="text" readonly="readonly" class="form-control" id="site_short_name" name="site_short_name" value="{{$companies->site_short_name}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -45,7 +42,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="email" value="{{$company->email}}">
+                            <input type="text" class="form-control" name="email" value="{{$companies->email}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -54,7 +51,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="phone" value="{{$company->phone}}">
+                            <input type="text" class="form-control" name="phone" value="{{$companies->phone}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -62,7 +59,7 @@
                             Tax Id
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="tax_id" class="form-control" name="tax_id" value="{{$company->tax_id}}">
+                            <input type="text" id="tax_id" class="form-control" name="tax_id" value="{{$companies->tax_id}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -71,7 +68,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="city" class="form-control" name="city" value="{{$company->city}}">
+                            <input type="text" id="city" class="form-control" name="city" value="{{$companies->city}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -80,7 +77,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="state" class="form-control" name="state" value="{{$company->state}}">
+                            <input type="text" id="state" class="form-control" name="state" value="{{$companies->state}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -89,7 +86,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="street" class="form-control" name="street" value="{{$company->street}}">
+                            <input type="text" id="street" class="form-control" name="street" value="{{$companies->street}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -97,7 +94,7 @@
                             Zip code
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="zip_code" class="form-control" name="zip_code" value="{{$company->zip_code}}">
+                            <input type="text" id="zip_code" class="form-control" name="zip_code" value="{{$companies->zip_code}}">
                         </div>
                     </div>
 
@@ -113,7 +110,7 @@
                                 <option value="{{ $country->id }}"> {{$country->country_name}} </option>
                                 @endforeach
                             </select>
-                            <label id="default-error" class="error" for="default"></label>
+                            <label id="country-error" class="error" for="country"></label>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -128,7 +125,7 @@
                                 <option value="{{ $language->id }}"> {{$language->language_name}} </option>
                                 @endforeach
                             </select>
-                            <label id="default-error" class="error" for="default"></label>
+                            <label id="language-error" class="error" for="language"></label>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -143,7 +140,7 @@
                                 <option value="{{ $currency->id }}"> {{$currency->currency_name}} </option>
                                 @endforeach
                             </select>
-                            <label id="default-error" class="error" for="default"></label>
+                            <label id="currency-error" class="error" for="currency"></label>
                         </div>
                     </div>
                     <div class="form-group row" id="getBottomMargin" style="margin-bottom: 35px">
@@ -164,7 +161,7 @@
                         <label class="col-sm-3 control-label " for="inputEmail3"></label>
                         <div class="col-sm-7">
                             <div id="logoCompany">
-                                <img alt="Company Logo" src="{{asset('images/'.$company->logo)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
+                                <img alt="Company Logo" src="{{asset('images/'.$companies->logo)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
                             </div>
                             <input type="hidden" name="pic" value="986bcf224680f2ad5b7e544670d58a6f_1_avatar-300x300.png">
                         </div>
@@ -188,7 +185,7 @@
                         <label class="col-sm-3 control-label " for="inputEmail3"></label>
                         <div class="col-sm-7">
                             <div id="logoCompany">
-                                <img alt="Company Logo" src="{{asset('images/'.$company->favicon)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
+                                <img alt="Company Logo" src="{{asset('images/'.$companies->favicon)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
                             </div>
                             <input type="hidden" name="pic" value="986bcf224680f2ad5b7e544670d58a6f_1_avatar-300x300.png">
                         </div>
@@ -198,7 +195,6 @@
                         <button type="submit" class="btn btn-primary custom-btn-small float-left submit">Submit</button>
                     </div>
                 </form>
-                @endforeach
             </div>
         </div>
     </div>

@@ -3,37 +3,23 @@
 <div class="col-sm-12">
     <div class="row">
         <div class="col-md-3 col-sm-12">
-            <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <li><a class="nav-link text-left active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a></li>
-                <li><a class="nav-link text-left" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a></li>
-                <li><a class="nav-link text-left" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</a></li>
-                <li><a class="nav-link text-left" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Locations</a></li>
+            <ul class="nav flex-column nav-pills" id="v-pills-tab" aria-orientation="vertical">
+                <li><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('company.viewSettings')}}">Company Settings</a></li>
+                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="{{route('department.viewlist')}}">Department</a></li>
+                <li><a class="nav-link text-left" id="v-pills-messages-tab" href="{{route('addUserRole')}}">User Roles</a></li>
+                <li {{(request()->path() == 'admin/location/newlocation') ? 'class="active"' : null}} @php if('class=="active"'){
+                echo ' style="background-color:#3490dc;';
+                echo 'border-radius: 0.25rem;"';
+                }
+            @endphp><a class="nav-link text-left" id="v-pills-settings-tab"  href="{{route('settings.addNewLocation')}}" style="@php if(' class=="active"') echo ' color:#fff';@endphp">Locations</a></li>
             </ul>
         </div>
         <div class="col-md-9 col-sm-12">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <p class="mb-0">Cillum ad ut irure tempor velit nostrud occaecat ullamco aliqua anim Lorem sint. Veniam sint duis incididunt do esse magna mollit excepteur laborum qui. Id id reprehenderit sit est
-                        eu aliqua
-                        occaecat quis et velit excepteur laborum mollit dolore eiusmod. Ipsum dolor in occaecat commodo et voluptate minim reprehenderit mollit pariatur. Deserunt non laborum enim et cillum eu deserunt
-                        excepteur ea incididunt minim occaecat.</p>
-                </div>
-                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    <p class="mb-0">Culpa dolor voluptate do laboris laboris irure reprehenderit id incididunt duis pariatur mollit aute magna pariatur consectetur. Eu veniam duis non ut dolor deserunt commodo et
-                        minim in quis
-                        laboris ipsum velit id veniam. Quis ut consectetur adipisicing officia excepteur non sit. Ut et elit aliquip labore Lorem enim eu. Ullamco mollit occaecat dolore ipsum id officia mollit qui
-                        esse anim eiusmod do sint minim consectetur qui.</p>
-                </div>
-                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                    <p class="mb-0">Fugiat id quis dolor culpa eiusmod anim velit excepteur proident dolor aute qui magna. Ad proident laboris ullamco esse anim Lorem Lorem veniam quis Lorem irure occaecat velit
-                        nostrud magna
-                        nulla. Velit et et proident Lorem do ea tempor officia dolor. Reprehenderit Lorem aliquip labore est magna commodo est ea veniam consectetur.</p>
-                </div>
-                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                <!-- <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab"> -->
                     <div class="col-md-6">
-
-                        <form style="width: 200%"  id="formID" method="POST" action="{{route('settings.createLocation')}}" data-parsley-validate="">
-                        @csrf()
+                        <form style="width: 200%" id="formID" method="POST" action="{{route('settings.createLocation')}}" data-parsley-validate="">
+                            @csrf()
                             <div class="form-group row p-t-10">
                                 <label class="col-sm-3 control-label a" for="inputEmail3">
                                     Location Name
@@ -54,7 +40,6 @@
                                     <span id="val_loc_code" style="color: red"></span>
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <label class="col-sm-3 control-label a" for="inputEmail3">
                                     Delivery Address
@@ -130,7 +115,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -153,7 +138,7 @@
                 required: true
             },
             phone: {
-                number:  true
+                number: true
             },
             email: {
                 email: true

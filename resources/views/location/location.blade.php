@@ -6,7 +6,7 @@
         <div class="col-md-3 col-sm-12">
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <li><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('company.viewSettings')}}">Company Settings</a></li>
-                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="">Department</a></li>
+                <li><a class="nav-link text-left" id="v-pills-profile-tab" href="{{route('department.viewlist')}}">Department</a></li>
                 <li><a class="nav-link text-left" id="v-pills-messages-tab" href="{{route('addUserRole')}}">User Roles</a></li>
                     <li {{(request()->path() == 'admin/location') ? 'class="active"' : null}} @php if('class=="active"'){
                 echo ' style="background-color:#3490dc;';
@@ -24,7 +24,7 @@
                     <hr />
                     <!-- table starts here -->
                     <div class="col-xl-6">
-                        <table id="fixed-columns-left" class="table table-striped table-hover table-bordered nowrap" style="width:100%; margin-left: -10%;">
+                        <table id="fixed-columns-left" class="table table-striped table-hover table-bordered nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Location Name</th>
@@ -89,7 +89,7 @@
         if (confirm("Are you sure you want to Delete this data?")) {
             $.ajax({
                 type: "post",
-                url: "/admin/deletelocation/" + id,
+                url: "/admin/location/deletelocation/" + id,
                 data: {
                     "id": id,
                     "_token": "{{ csrf_token() }}"
