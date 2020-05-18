@@ -56,7 +56,7 @@
                                                         </td>
 
                                                         <td>
-                                                            <input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="pr-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->product->price}}">
+                                                            <input type="text" style="text-align: center" class="calculate price data-parsley-validate positive-float-number" id="pr-{{$odr->product_id}}" data-parsley-trigger="keyup" data-parsley-required="true" data-parsley-type="number" name="price[]" value="{{$odr->product->retail_price}}">
                                                         </td>
 
                                                         <td>
@@ -214,7 +214,7 @@
                     html += '<option value = "6" > Paypal(3.5)(3.50) </option>'
                     html += '<option value = "7" > Paypal(4.5)(4.50) </option>'
                     html += '</select></td>'
-                    html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.price + '</div></td>'
+                    html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.retail_price + '</div></td>'
                     html += '<td><span class="dltBtn"><i class="fa fa-trash" aria-hidden="true"></i></span></td>'
                     html += '</tr>';
                     $('.addProduct').append(html);

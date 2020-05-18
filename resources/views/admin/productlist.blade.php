@@ -27,7 +27,7 @@
                                                 <tr id="tr-{{$product->id}}">
                                                     <td>{{$product->name}}</td>
                                                     <td>{{$product->quantity}}</td>
-                                                    <td>{{$product->price}}</td>
+                                                    <td>{{$product->retail_price}}</td>
                                                     <td>
                                                         <a class="btn btn-success btn-sm " style="color:white; margin-bottom: 10px; margin-left: 30%; display: block; float:left" href="{{route('view.editProduct',$product->id)}}"><i class="fas fa-edit"></i></a>
 

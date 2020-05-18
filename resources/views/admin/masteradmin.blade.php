@@ -69,6 +69,7 @@
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Settings</span></a>
                         <ul class="pcoded-submenu">
                             <li><a href="{{route('company.viewSettings')}}" class="">Company Details</a></li>
+                            <li><a href="{{route('itemCategories.viewlist')}}" class="">General Settings</a></li>
                             <li><a href="{{route('PaymentTerms.viewlist')}}" class="">Finance</a></li>
                         </ul>
                     </li>

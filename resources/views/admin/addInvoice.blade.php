@@ -143,8 +143,6 @@
                     <label id="list-error" class="error" for="list"></label>
                 </td>
             </table>
-
-
             <div class="form-group">
                 <div id="addCategory">
                     <table class="table">
@@ -167,9 +165,35 @@
                         </tr>
                     </table>
                 </div>
+                <div class="col-sm-12">
+                    <div class="form-group row">
+                          <label>Note</label>
+                          <textarea placeholder="Description ..." rows="3" class="form-control" name="comments"></textarea>
+                    </div>
+                    <div class="form-group row">
+                        <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                          <input type="checkbox" name="has_comment" id="checkbox-p-fill-1" checked="">
+                          <label for="checkbox-p-fill-1" class="cr"><strong>Print note on pdf</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-1 col-form-label">File</label>
+                        <div class="col-md-11">
+                          <div class="dropzone-attachments">
+                            <div class="event-attachments">
+                              <div class="add-attachments dz-clickable">
+                                  <input type="file" name="" value="">
+                              </div>
+                              <span class="badge badge-danger">Note!</span> Allowed File Extensions: jpg, png, gif, docx, xls, xlsx, csv and pdf
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
                 <input type="submit" id="orderSubmit" class="btn btn-primary submitBtn" value="Order Now">
             </div>
         </div>
+    </div>
 </form>
 <!-- Modal to add new customer-->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -277,8 +301,9 @@
                     html += '<input type="hidden" name="id[]"  value = "' + product.id + '"/>'
                     html += '<td><div class="inputAutocomplete">' + product.name + '</div></td>'
                     html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number quantity errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "qt-' + product.id + '"  name="quantity[]" value = "1"/>'
-                    html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number price errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "pr-' + product.id + '"  name="price[]"  value = "' + product.price + '"/>'
-                    html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.price + '</div></td>'
+                    html += '<td><input type="text" class="inputAutocomplete calculate positive-float-number price errorChecking" required data-parsley-validate data-parsley-trigger="keyup" data-parsley-type="number" data-rel="' + product.id + '" id = "pr-' + product.id + '"  name="price[]"  value = "' + product.retail_price + '"/>'
+                    html += '<td><div class="inputAutocomplete total" style="width:70px; max-width: 70px" id = "total-' + product.id + '" name="total[]">' + 1 * product.retail_price + '</div></td>'
+
                     html += '<td><span class="dltBtn"><i class="fas fa-trash-alt"></i></span></td>'
                     html += '</tr>';
                     $('.addProduct').append(html);

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\ItemType;
 use App\Order;
 use App\Product;
 use App\OrderDetails;
+use App\Tax;
+use App\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User;
@@ -14,7 +18,6 @@ class ProductsController extends Controller
 {
     public function index()
     {
-
         return view('products.productlist');
     }
 
@@ -28,9 +31,7 @@ class ProductsController extends Controller
             $gg = $data->toArray();
             // dd($gg);
             if (count($gg) > 0) {
-
                 foreach ($data as $row) {
-
                     $output .= '<li onclick="addingProduct(this)" class="listItems" id= ' . $row->id . '>' . $row->name . '</li>';
                 }
             } else {
@@ -171,15 +172,32 @@ class ProductsController extends Controller
     {
         $product = new Product;
         $product->name = $request->name;
+        $product->item_id = $request->item_id;
+        $product->hsn = $request->hsn;
+        $product->item_type_id = $request->item_type_id;
+        $product->category_id = $request->category_id;
+        $product->unit_id = $request->unit_id;
+        $product->tax_type_id = $request->tax_type_id;
+        $product->description = $request->description;
+        $product->purchase_price = $request->purchase_price;
+        $product->retail_price = $request->retail_price;
         $product->quantity = $request->quantity;
-        $product->price = $request->price;
 
+        if ($request->item_image) {
+            $imageName = time() . '.' . $request->item_image->extension();
+            $product->item_image = $request->item_image->move(public_path('images'), $imageName);
+            $product->item_image = $imageName;
+        }
         $product->save();
         return redirect('admin/productlist');
     }
     public function viewAddProduct()
     {
-        return view('admin.addproduct');
+        $data['itemTypes'] = ItemType::all(); 
+        $data['categories'] = Category::all(); 
+        $data['units'] = Unit::all(); 
+        $data['taxes'] = Tax::all(); 
+        return view('admin.addproduct', $data);
     }
     public function updateProduct(Request $request)
     {

@@ -22,7 +22,7 @@ class DepartmentsController extends Controller
         $data = Department::find($request->id);
         // dd($data);
         
-        return $data;
+        return $data; 
     }
     public function updateDepartment(Request $request){
         $data = Department::find($request->dept_id);

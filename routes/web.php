@@ -113,7 +113,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/editdepartment', 'DepartmentsController@updateDepartment')->name('department.update');
         Route::post('/deletedepartment/{id}', 'DepartmentsController@deleteDepartment')->name('department.delete');
     });
-    // departments routes
+    // finance routes
     Route::prefix('finance')->group(function () {
         Route::get('/paymentterms', 'PaymentTermsController@index')->name('PaymentTerms.viewlist');
         Route::post('/newpayment', 'PaymentTermsController@savePaymentTerm')->name('paymentTerm.addNew');
@@ -121,5 +121,43 @@ Route::prefix('admin')->group(function () {
         Route::post('/updatepayment', 'PaymentTermsController@updatePayment')->name('payment.update');
         Route::post('/deletepayment/{id}', 'PaymentTermsController@deletePaymentTerm')->name('deletePaymentTerm.delete');
 
+        Route::prefix('tax')->group(function () {
+            Route::get('/', 'TaxController@index')->name('taxes.viewlist');
+            Route::post('/newtax', 'TaxController@saveTax')->name('taxes.addNew');
+            Route::get('/edittax/{id}', 'TaxController@editTax')->name('taxes.edit');
+            Route::post('/updatetax', 'TaxController@updateTax')->name('taxes.update');
+            Route::post('/deletetax/{id}', 'TaxController@deleteTax')->name('taxes.delete');
+        });
+    });
+    // general settings routes
+    Route::prefix('generalsettings')->group(function () {
+        Route::prefix('categories')->group(function () {
+            Route::get('/', 'CategoriesController@index')->name('itemCategories.viewlist');
+            Route::post('/newcategory', 'CategoriesController@saveCategory')->name('category.addNew');
+            Route::get('/editcategory/{id}', 'CategoriesController@editCategory')->name('category.edit');
+            Route::post('/updatecategory', 'CategoriesController@updateCategory')->name('category.update');
+            Route::post('/deletecategory/{id}', 'CategoriesController@deleteCategory')->name('category.delete');
+        });
+        Route::prefix('languages')->group(function () {
+            Route::get('/', 'LanguagesController@index')->name('language.viewlist');
+            Route::post('/newlanguage', 'LanguagesController@saveLanguage')->name('language.addNew');
+            Route::get('/editlanguage/{id}', 'LanguagesController@editLanguage')->name('language.edit');
+            Route::post('/updatelanguage', 'LanguagesController@updateLanguage')->name('language.update');
+            Route::post('/deletelanguage/{id}', 'LanguagesController@deleteLanguage')->name('language.delete');
+        });
+        Route::prefix('units')->group(function () {
+            Route::get('/', 'UnitsController@index')->name('units.viewlist');
+            Route::post('/newunit', 'UnitsController@saveUnit')->name('units.addNew');
+            Route::get('/editunit/{id}', 'UnitsController@editUnit')->name('units.edit');
+            Route::post('/updateunit', 'UnitsController@updateUnit')->name('units.update');
+            Route::post('/deleteunit/{id}', 'UnitsController@deleteUnit')->name('units.delete');
+        });
+        Route::prefix('itemtype')->group(function () {
+            Route::get('/', 'ItemTypesController@index')->name('itemType.viewlist');
+            Route::post('/newitemtype', 'ItemTypesController@saveItemType')->name('itemType.addNew');
+            Route::get('/edititemtype/{id}', 'ItemTypesController@editItemType')->name('itemType.edit');
+            Route::post('/updateitemtype', 'ItemTypesController@updateItemType')->name('itemType.update');
+            Route::post('/deleteitemtype/{id}', 'ItemTypesController@deleteItemType')->name('itemType.delete');
+        });
     });
 });
