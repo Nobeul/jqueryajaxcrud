@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-3 col-sm-12">
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <li><a class="nav-link text-left" id="v-pills-home-tab" href="">Taxes</a></li>
+                <li><a class="nav-link text-left" id="v-pills-home-tab" href="{{route('taxes.viewlist')}}">Taxes</a></li>
                 <li><a class="nav-link text-left" id="v-pills-profile-tab" href="">Currencies</a></li>
                 <li><a class="nav-link text-left" id="v-pills-messages-tab" href="">Bank Account Type</a></li>
                 <li {{(request()->path() == 'admin/finance/paymentterms') ? 'class="active"' : null}} @php if('class=="active"'){
@@ -13,7 +13,7 @@
                 echo 'border-radius: 0.25rem;"';
                 }
             @endphp
-                ><a class="nav-link text-left" id="v-pills-settings-tab"  href="" style="@php if(' class=="active"') echo ' color:#fff';@endphp">Payment Terms</a></li>
+                ><a class="nav-link text-left" id="v-pills-settings-tab"  href="{{route('PaymentTerms.viewlist')}}" style="@php if(' class=="active"') echo ' color:#fff';@endphp">Payment Terms</a></li>
                 <li><a class="nav-link text-left" id="v-pills-messages-tab" href="">Payment Methods</a></li>
             </ul>
         </div>
@@ -227,6 +227,27 @@
                 $('#is_default1').val(data.is_default);
             }
         })
+    });
+    $('#modalForm').validate({
+        rules: {
+            term_name: {
+                required: true
+            },
+            due_day:{
+                required:true
+            }
+        }
+    });
+
+    $('#modalForm1').validate({
+        rules: {
+            term_name: {
+                required: true
+            },
+            due_day:{
+                required:true
+            }
+        }
     });
 </script>
 @endsection

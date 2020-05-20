@@ -31,11 +31,24 @@ class InvoicesController extends Controller
 
     public function orderStore(Request $request)
     {
+        // dd($request->all());
         $userId = $request->user;
         $insert_data = [];
         $product_id = $request->id;
+        $location_id = $request->location_id;
         $quantity = $request->quantity;
         $price = $request->price;
+        $comments = $request->comments;
+        $file = '';
+        if ($request->file) {
+            $order = new Order();
+            $fileName = time() . '.' . $request->file->extension();
+            $order->file = $request->file->move(public_path('files'), $fileName);
+            // dd($order->file);
+            $order->file = $fileName;
+            $file = $order->file;
+            
+        }
         // order number starts here
         $date;
         $order_number = Order::orderBy('id', 'desc')->count('orders.order_number');
@@ -46,7 +59,7 @@ class InvoicesController extends Controller
         } else {
             $order_number = Order::orderBy('id', 'desc')->first();
             $order_number = 'order-' . $request->order_number;
-            $date = $request->date;
+            $date = date("d-m-y", strtotime($request->date));
         }
         $grand_total = 0;
         // order number ends here
@@ -63,7 +76,10 @@ class InvoicesController extends Controller
             'user_id' => $userId,
             'grand_total' => $grand_total,
             'order_number' => $order_number,
-            'date' => $date
+            'location_id' => $location_id,
+            'date' => $date,
+            'comments' => $comments,
+            'file' => $file
         );
         Order::insert($order);
 
@@ -81,6 +97,7 @@ class InvoicesController extends Controller
             $insert_data[] = $data;
         }
         // dd($insert_data);
+
         OrderDetails::insert($insert_data);
         return redirect('admin/getorder');
     }

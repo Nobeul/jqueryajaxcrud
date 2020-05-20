@@ -16,16 +16,16 @@
         </div>
         <div class="col-md-9 col-sm-12">
             <div class="tab-content" id="v-pills-tabContent">
-                <form id="formID" method="POST" action="{{route('company.saveSettings')}}" data-parsley-validate="" enctype="multipart/form-data">
+                <form id="formID" method="POST" action="{{route('company.saveSettings')}}" enctype="multipart/form-data">
                     @csrf()
-                    <input type="hidden" name="id" value="{{$companies->id}}">
+                    <input type="hidden" name="id" value="{{!empty($companies->id) ? $companies->id : ''}}">
                     <div class="form-group row p-t-10">
                         <label class="col-sm-3 control-label a" for="inputEmail3">
                             Name
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="name" name="name" value="{{$companies->name}}">
+                            <input type="text" class="form-control" id="name" name="name" value="{{!empty($companies->name) ? $companies->name : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -33,7 +33,7 @@
                             Site Short Name
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" readonly="readonly" class="form-control" id="site_short_name" name="site_short_name" value="{{$companies->site_short_name}}">
+                            <input type="text" readonly="readonly" class="form-control" id="site_short_name" name="site_short_name" value="{{!empty($companies->site_short_name) ? $companies->site_short_name : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -42,7 +42,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="email" value="{{$companies->email}}">
+                            <input type="text" class="form-control" name="email" value="{{!empty($companies->email) ? $companies->email : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -51,7 +51,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="phone" value="{{$companies->phone}}">
+                            <input type="text" class="form-control" name="phone" value="{{!empty($companies->phone) ? $companies->phone : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -59,7 +59,7 @@
                             Tax Id
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="tax_id" class="form-control" name="tax_id" value="{{$companies->tax_id}}">
+                            <input type="text" id="tax_id" class="form-control" name="tax_id" value="{{!empty($companies->tax_id) ? $companies->tax_id : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -68,7 +68,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="city" class="form-control" name="city" value="{{$companies->city}}">
+                            <input type="text" id="city" class="form-control" name="city" value="{{!empty($companies->city) ? $companies->city : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -77,7 +77,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="state" class="form-control" name="state" value="{{$companies->state}}">
+                            <input type="text" id="state" class="form-control" name="state" value="{{!empty($companies->state) ? $companies->state : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -86,7 +86,7 @@
                             <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="street" class="form-control" name="street" value="{{$companies->street}}">
+                            <input type="text" id="street" class="form-control" name="street" value="{{!empty($companies->street) ? $companies->street : ''}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -94,7 +94,7 @@
                             Zip code
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" id="zip_code" class="form-control" name="zip_code" value="{{$companies->zip_code}}">
+                            <input type="text" id="zip_code" class="form-control" name="zip_code" value="{{!empty($companies->zip_code) ? $companies->zip_code : ''}}">
                         </div>
                     </div>
 
@@ -105,7 +105,6 @@
                         </label>
                         <div class="col-sm-6">
                             <select class="form-control js-example-basic-single select2-hidden-accessible " name="country_name" id="is_default" data-select2-id="default" tabindex="-1" aria-hidden="true" style="height: calc(2.19rem + 2px)">
-                                <option value="2" selected> USA </option>
                                 @foreach($countries as $country)
                                 <option value="{{ $country->id }}"> {{$country->country_name}} </option>
                                 @endforeach
@@ -120,7 +119,7 @@
                         <div class="col-sm-6">
 
                             <select class="form-control js-example-basic-single select2-hidden-accessible " name="language_name" id="language_name" data-select2-id="default" tabindex="-1" aria-hidden="true" style="height: calc(2.19rem + 2px)">
-                                <option value="2" selected> English </option>
+                                <!-- <option value="2" selected> English </option> -->
                                 @foreach($languages as $language)
                                 <option value="{{ $language->id }}"> {{$language->language_name}} </option>
                                 @endforeach
@@ -135,7 +134,7 @@
                         <div class="col-sm-6">
 
                             <select class="form-control js-example-basic-single select2-hidden-accessible " name="currency_name" id="currency_name" data-select2-id="default" tabindex="-1" aria-hidden="true" style="height: calc(2.19rem + 2px)">
-                                <option value="2" selected> Dollar </option>
+                                <!-- <option value="2" selected> Dollar </option> -->
                                 @foreach($currencies as $currency)
                                 <option value="{{ $currency->id }}"> {{$currency->currency_name}} </option>
                                 @endforeach
@@ -161,7 +160,11 @@
                         <label class="col-sm-3 control-label " for="inputEmail3"></label>
                         <div class="col-sm-7">
                             <div id="logoCompany">
+
+                                @if(!empty($companies->logo))
+
                                 <img alt="Company Logo" src="{{asset('images/'.$companies->logo)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
+                                @endif
                             </div>
                             <input type="hidden" name="pic" value="986bcf224680f2ad5b7e544670d58a6f_1_avatar-300x300.png">
                         </div>
@@ -185,14 +188,16 @@
                         <label class="col-sm-3 control-label " for="inputEmail3"></label>
                         <div class="col-sm-7">
                             <div id="logoCompany">
+                                @if(!empty($companies->favicon))
                                 <img alt="Company Logo" src="{{asset('images/'.$companies->favicon)}}" class="img-responsive asa" id="pro_img" style="padding: 10px 10px"><span class="remove_img_preview"></span>
+                                @endif
                             </div>
                             <input type="hidden" name="pic" value="986bcf224680f2ad5b7e544670d58a6f_1_avatar-300x300.png">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="btn_save" class="col-sm-0 pl-2 ml-2 control-label"></label>
-                        <button type="submit" class="btn btn-primary custom-btn-small float-left submit">Submit</button>
+                        <button type="submit" class="btn btn-primary custom-btn-small float-left submit" id="submitBtn">Submit</button>
                     </div>
                 </form>
             </div>
@@ -202,4 +207,43 @@
 
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
+<script src="{{asset('https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+<script>
+    $('#formID').validate({
+        rules: {
+            name: {
+                required: true
+            },
+            email: {
+                required: true
+            },
+            phone: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            state: {
+                required: true
+            },
+            street: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            state: {
+                required: true
+            },
+            logo: {
+                extension: "jpg|jpeg|png"
+            },
+            favicon: {
+                extension: "jpg|jpeg|png"
+            }
+        }
+    });
+</script>
 @endsection

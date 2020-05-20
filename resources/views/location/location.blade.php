@@ -23,8 +23,8 @@
                     <br /><br />
                     <hr />
                     <!-- table starts here -->
-                    <div class="col-xl-6">
-                        <table id="fixed-columns-left" class="table table-striped table-hover table-bordered nowrap" style="width:100%">
+                    <div >
+                        <table id="tableID" class="table table-striped table-hover table-bordered nowrap">
                             <thead>
                                 <tr>
                                     <th>Location Name</th>
@@ -38,7 +38,10 @@
                             <tbody>
                                 @foreach($locations as $location)
                                 <tr id="{{$location->id}}">
-                                    <td>{{$location->name}}</td>
+                                    <td>
+                                        <a href="{{route('editLocation', $location->id)}}" 
+                                        style="color:black; font-weight:bold; text-decoration:none">{{$location->name}}</a>
+                                    </td>
                                     <td>{{$location->address}}</td>
                                     <td>
                                         @php
@@ -78,6 +81,8 @@
 
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>
 
 <script>
     //Ajax delete 
@@ -102,6 +107,14 @@
         } else {
             return false;
         }
+    });
+
+    // yajra datatables
+    $(document).ready(function() {
+        $('#tableID').DataTable( { 
+            responsive:true
+            }
+            );
     });
 </script>
 @endsection

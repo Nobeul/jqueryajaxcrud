@@ -146,7 +146,7 @@ class ProductsController extends Controller
             ->orderBy('orders.order_number', 'desc')
             ->where('user_id', $userId)
             ->get();
-        return view('products.orderList')->with('order', $order);
+        ('products.orderList')->with('order', $order);
     }
 
     public function editOrder(Request $request)
@@ -203,8 +203,23 @@ class ProductsController extends Controller
     {
         $product = Product::find($request->id);
         $product->name = $request->name;
+        $product->item_id = $request->item_id;
+        $product->hsn = $request->hsn;
+        $product->item_type_id = $request->item_type_id;
+        $product->category_id = $request->category_id;
+        $product->unit_id = $request->unit_id;
+        $product->tax_type_id = $request->tax_type_id;
+        $product->description = $request->description;
+        $product->purchase_price = $request->purchase_price;
+        $product->retail_price = $request->retail_price;
         $product->quantity = $request->quantity;
-        $product->price = $request->price;
+        if ($request->item_image) {
+            $imageName = time() . '.' . $request->item_image->extension();
+            $product->item_image = $request->item_image->move(public_path('images'), $imageName);
+            $product->item_image = $imageName;
+        }
+
+        // dd($product);
 
         $product->save();
         return redirect('admin/productlist');
@@ -212,8 +227,12 @@ class ProductsController extends Controller
 
     public function viewProduct(Request $request)
     {
-        $product = Product::find($request->id);
+        $data['product'] = Product::find($request->id);
+        $data['itemTypes'] = ItemType::all(); 
+        $data['categories'] = Category::all(); 
+        $data['units'] = Unit::all(); 
+        $data['taxes'] = Tax::all(); 
         // dd($product);   
-        return view('admin.editproduct')->with('product', $product);
+        return view('admin.editproduct',$data);
     }
 }

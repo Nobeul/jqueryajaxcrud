@@ -13,7 +13,7 @@
                             <div class="top" style="margin:2%"></div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <form action="{{route('insert.product')}}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{route('insert.product')}}" id="FormID" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group row ">
                                             <label class="col-sm-2 control-label require">Item Name<span class="text-danger">*</span></label>
@@ -108,6 +108,7 @@
                                                     </div>
                                                     <input type="text" class="form-control positive-float-number valid" placeholder="Purchase Price" name="purchase_price" id="purchase_price">
                                                 </div>
+                                                <label id="purchase_price-error" class="error" for="purchase_price"></label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -170,5 +171,26 @@
 </div>
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
+<script src="{{asset('https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js')}}"></script>
+
+<script>
+    
+    $('#FormID').validate({
+        rules: {
+            name: {
+                required: true
+            },
+            item_id: {
+                required: true
+            },
+            purchase_price: {
+                required: true
+            },
+            quantity: {
+                required: true
+            }
+        }
+    });
+</script>
 
 @endsection

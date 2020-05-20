@@ -16,7 +16,8 @@
                                         <table class="table  invoice-detail-table  align_center" id="myTable">
                                             <thead>
                                                 <tr class="thead-default">
-                                                    <th>Product Number</th>
+                                                    <th>Picture</th>
+                                                    <th>Product Name</th>
                                                     <th>Quantity</th>
                                                     <th>Price</th>
                                                     <th>Action</th>
@@ -25,6 +26,7 @@
                                             <tbody>
                                                 @foreach($products as $product)
                                                 <tr id="tr-{{$product->id}}">
+                                                    <td tabindex="0"><img src="{{asset('images/'.$product->item_image)}}" alt="" width="50" height="50"></td>
                                                     <td>{{$product->name}}</td>
                                                     <td>{{$product->quantity}}</td>
                                                     <td>{{$product->retail_price}}</td>

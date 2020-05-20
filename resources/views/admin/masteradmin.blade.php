@@ -21,6 +21,7 @@
     <!-- Own written CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> -->
 
 </head>
 
@@ -46,9 +47,9 @@
                 <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
             </div>
             <div class="navbar-content scroll-div">
-                <ul class="nav pcoded-inner-navbar">
+                <ul class="nav pcoded-inner-navbar {{(request()->path() == 'admin/*') ? 'class="active"' : "inactive"}}">
                     <li class="nav-item pcoded-menu-caption"> 
-                        <label>Extension</label>
+                        <label>Extension</label> 
                     </li>
                     <li data-username="Invoice Summury List" class="nav-item pcoded-hasmenu">
                         <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-minus"></i></span><span class="pcoded-mtext">Invoice</span></a>
@@ -70,7 +71,7 @@
                         <ul class="pcoded-submenu">
                             <li><a href="{{route('company.viewSettings')}}" class="">Company Details</a></li>
                             <li><a href="{{route('itemCategories.viewlist')}}" class="">General Settings</a></li>
-                            <li><a href="{{route('PaymentTerms.viewlist')}}" class="">Finance</a></li>
+                            <li><a href="{{route('taxes.viewlist')}}" class="">Finance</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -92,8 +92,6 @@ class OrdersController extends Controller
             }
         }
 
-
-
         $order_id  = $request->order_id;
 
         $grand_total = $request->grand_total;

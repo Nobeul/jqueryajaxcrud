@@ -238,10 +238,6 @@
         }
     });
 
-    // function editDepartment() {
-    // $('.modal-title').text('Edit Department');
-    // $('#modal1').modal();
-    // }
     $('.editCategory').on('click', function() {
         var id = $(this).attr('id');
         $('#id').val(id);

@@ -1,0 +1,8 @@
+beside search product-> customer list selection, tax type, reference, invoice date, payment term
+Add settings option-> company profile
+check vRent(new update soon v2.9)
+
+https://www.webslesson.info/2019/07/how-to-implement-date-range-filter-in-laravel-58-datatable.html
+
+2020_03_03_061257_create_users_table.php
+2020_04_29_072536_create_locations_table.php

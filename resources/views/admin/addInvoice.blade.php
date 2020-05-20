@@ -1,7 +1,7 @@
 @extends('admin.masteradmin')
 
 @section('content')
-<form method="post" action="{{route('admin.postAddInvoice')}}">
+<form method="post" action="{{route('admin.postAddInvoice')}}" enctype="multipart/form-data">
     @csrf
     <!-- New Invoice starts here -->
     <div class="card">
@@ -35,25 +35,27 @@
                             <label class="col-form-label">Reference</label>
                             <span class="text-danger">*</span>
                         </div>
-                        <div class="input-group date col-md-8 p-md-0">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" style="margin-left: 20%">order-</span>
+                        <!-- <div class="input-group col-md-8 p-md-0"> -->
+                            <div class="col-sm-9">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="margin-left: 20%">order-</span>
+                                    <input id="reference_no" class="form-control" name="order_number" value="
+                                    @php 
+                                    if($order == 1)
+                                    {
+                                        echo '0001';
+                                    }else{
+                                        
+                                        $pre_order_number = trim($order, 'order-');
+                                        $post_order_number = str_pad(++$pre_order_number, 4, "0", STR_PAD_LEFT); 
+                                        echo str_replace(' ', '', $post_order_number); 
+                                        
+                                    } 
+                                    @endphp 
+                                    " type=" text" style="margin-left: 2%">
+                                </div>
                             </div>
-                            <input id="reference_no" class="form-control" name="order_number" value="
-                            @php 
-                            if($order == 1)
-                            {
-                                echo '0001';
-                            }else{
-                                
-                            $pre_order_number = trim($order, 'order-');
-                            $post_order_number = str_pad(++$pre_order_number, 4, "0", STR_PAD_LEFT); 
-                            echo str_replace(' ', '', $post_order_number); 
-                            
-                        } 
-                            @endphp 
-                            " type=" text" style="margin-left: 2%">
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -64,7 +66,7 @@
                             <label class="col-form-label">Location</label>
                         </div>
                         <div class="col-sm-9">
-                            <select id="inputState" class="form-control">
+                            <select id="inputState" class="form-control" name="location_id">
                                 <option selected="">Select</option>
                                 @foreach($locations as $location)
                                 <option value="{{$location->id}}">{{$location->name}}</option>
@@ -75,13 +77,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row form-group">
-                        <div class="col-sm-3">
+                         <div class="col-sm-3">
                             <label class="col-form-label">Date</label>
                             <span class="text-danger">*</span>
                         </div>
-                        <div class="col-sm-9">
-                            <input type="date" id="date" name="date" class="form-control">
+                        <!-- <div class="col-sm-9">
+                            <input type="text" id="date" name="date" class="form-control">
                             <label id="date-error" class="error" for="date"></label>
+                        </div> -->
+                        <div class="col-sm-9">
+                            <div class="input-group date">
+                                <input type="text" name="date" class="form-control" value="12-02-2012">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +192,7 @@
                           <div class="dropzone-attachments">
                             <div class="event-attachments">
                               <div class="add-attachments dz-clickable">
-                                  <input type="file" name="" value="">
+                                  <input type="file" name="file" value="">
                               </div>
                               <span class="badge badge-danger">Note!</span> Allowed File Extensions: jpg, png, gif, docx, xls, xlsx, csv and pdf
                             </div>
@@ -257,7 +267,15 @@
 <script src="{{asset('dattaAble/assets/js/vendor-all.min.js')}}"></script>
 <script src="{{asset('dattaAble/assets/js/pcoded.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
+    $(function () {
+        $(".date").datepicker({ 
+                autoclose: true, 
+                todayHighlight: true
+        }).datepicker('update', new Date());
+        });
+
     var quantity_id = [];
     $('#formUniqueID').parsley();
     $('#modalForm').parsley();
@@ -271,7 +289,6 @@
             event.preventDefault();
         }
     });
-
 
     var list_id = [];
     var i = 1;
